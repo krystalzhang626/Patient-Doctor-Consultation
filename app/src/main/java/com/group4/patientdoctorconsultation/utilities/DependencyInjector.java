@@ -2,10 +2,12 @@ package com.group4.patientdoctorconsultation.utilities;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.group4.patientdoctorconsultation.repository.ProfileRepository;
+import com.group4.patientdoctorconsultation.viewmodel.ProfileViewModelFactory;
 
 public class DependencyInjector {
 
-    private FirebaseFirestore getFirestore(){
+    private static FirebaseFirestore getFirestore() {
         FirebaseFirestore.setLoggingEnabled(true);
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setTimestampsInSnapshotsEnabled(true)
@@ -17,9 +19,12 @@ public class DependencyInjector {
         return firestore;
     }
 
-    // USE THIS PATTERN IF YOU ARE SETTING UP A REPO THAT REQUIRES FIRESTORE
-//    private Repository getRepository(){
-//        return Repository.getInstance(getFirestore());
-//    }
+    private static ProfileRepository getProfileRepository() {
+        return ProfileRepository.getInstance(getFirestore());
+    }
+
+    public static ProfileViewModelFactory provideProfileViewModelFactory(){
+        return new ProfileViewModelFactory(getProfileRepository());
+    }
 
 }

@@ -10,8 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.firebase.ui.auth.AuthUI;
 import com.group4.patientdoctorconsultation.R;
-import com.group4.patientdoctorconsultation.viewmodel.NavigationViewModel;
-import com.group4.patientdoctorconsultation.viewmodel.NavigationViewModelFactory;
+import com.group4.patientdoctorconsultation.utilities.DependencyInjector;
+import com.group4.patientdoctorconsultation.viewmodel.ProfileViewModel;
+import com.group4.patientdoctorconsultation.viewmodel.ProfileViewModelFactory;
 
 import java.util.Collections;
 
@@ -54,7 +55,7 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     private void initialiseViewModel(){
-        NavigationViewModel viewModel = getViewModel();
+        ProfileViewModel viewModel = getViewModel();
         viewModel.getIsSignedIn().observe(this, isSignedIn -> {
             if(isSignedIn != null && !isSignedIn){
                 startSignIn();
@@ -73,9 +74,11 @@ public class NavigationActivity extends AppCompatActivity {
         startActivityForResult(intent, RC_SIGN_IN);
     }
 
-    private NavigationViewModel getViewModel() {
+    private ProfileViewModel getViewModel() {
+        ProfileViewModelFactory profileViewModelFactory = DependencyInjector.provideProfileViewModelFactory();
+
         return ViewModelProviders
-                .of(this, new NavigationViewModelFactory())
-                .get(NavigationViewModel.class);
+                .of(this, profileViewModelFactory)
+                .get(ProfileViewModel.class);
     }
 }
