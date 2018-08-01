@@ -7,16 +7,19 @@ import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.group4.patientdoctorconsultation.common.FirestoreResource;
+import com.group4.patientdoctorconsultation.common.LiveCompleteListener;
 import com.group4.patientdoctorconsultation.model.Profile;
 import com.group4.patientdoctorconsultation.repository.ProfileRepository;
 
 public class ProfileViewModel extends ViewModel implements FirebaseAuth.AuthStateListener {
 
-    private MutableLiveData<Boolean> isSignedIn;
-    private LiveData<FirestoreResource<Profile>> profile;
     private ProfileRepository profileRepository;
+    private MutableLiveData<Boolean> isSignedIn;
 
-    public ProfileViewModel(ProfileRepository profileRepository) {
+    private String profileId;
+    private LiveData<FirestoreResource<Profile>> profile;
+
+    ProfileViewModel(ProfileRepository profileRepository) {
         this.profileRepository = profileRepository;
         isSignedIn = new MutableLiveData<Boolean>(){
             @Override
@@ -40,8 +43,16 @@ public class ProfileViewModel extends ViewModel implements FirebaseAuth.AuthStat
         isSignedIn.setValue(signedIn);
 
         if(signedIn){
-            profile = profileRepository.profileFromUserId(firebaseAuth.getCurrentUser().getUid());
+            profileId = firebaseAuth.getCurrentUser().getUid();
+            profile = profileRepository.profileFromUserId(profileId);
         }
+    }
+
+    public LiveCompleteListener updateProfile(Profile profile){
+        if(profileId != null){
+            return profileRepository.updateProfile(profileId, profile);
+        }
+        return null;
     }
 
     public LiveData<Boolean> getIsSignedIn() {
