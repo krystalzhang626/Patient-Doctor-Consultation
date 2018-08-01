@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<navigation xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/fragment_home">
+
+    <fragment
+        android:id="@+id/fragment_home"
+        android:name="com.group4.patientdoctorconsultation.ui.fragment.HomeFragment"
+        tools:layout="@layout/fragment_home">
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_profile"
+        android:name="com.group4.patientdoctorconsultation.ui.fragment.ProfileFragment"
+        tools:layout="@layout/fragment_profile">
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_preferences"
+        android:name="com.group4.patientdoctorconsultation.ui.fragment.PreferenceFragment"
+        tools:layout="@layout/fragment_preference" />
+
+</navigation>
