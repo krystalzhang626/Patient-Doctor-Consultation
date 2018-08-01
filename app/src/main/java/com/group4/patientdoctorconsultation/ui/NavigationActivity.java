@@ -56,7 +56,7 @@ public class NavigationActivity extends AppCompatActivity {
     private void initialiseViewModel(){
         NavigationViewModel viewModel = getViewModel();
         viewModel.getIsSignedIn().observe(this, isSignedIn -> {
-            if(isSignedIn != null && isSignedIn){
+            if(isSignedIn != null && !isSignedIn){
                 startSignIn();
             }
         });
