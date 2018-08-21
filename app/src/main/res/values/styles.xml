@@ -13,4 +13,8 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="CardTheme">
+        <item name="android:layout_margin">10dp</item>
+    </style>
+
 </resources>

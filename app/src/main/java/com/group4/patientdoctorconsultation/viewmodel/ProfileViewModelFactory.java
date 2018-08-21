@@ -4,14 +4,17 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.group4.patientdoctorconsultation.repository.ProfileRepository;
 
 public class ProfileViewModelFactory implements ViewModelProvider.Factory {
 
     private ProfileRepository profileRepository;
+    private FirebaseAuth firebaseAuth;
 
-    public ProfileViewModelFactory(ProfileRepository profileRepository) {
+    public ProfileViewModelFactory(ProfileRepository profileRepository, FirebaseAuth firebaseAuth) {
         this.profileRepository = profileRepository;
+        this.firebaseAuth = firebaseAuth;
     }
 
     @NonNull
@@ -19,7 +22,7 @@ public class ProfileViewModelFactory implements ViewModelProvider.Factory {
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if(modelClass.isAssignableFrom(ProfileViewModel.class)){
-            return (T) new ProfileViewModel(profileRepository);
+            return (T) new ProfileViewModel(profileRepository, firebaseAuth);
         }else{
             throw new IllegalArgumentException("View Model not found");
         }

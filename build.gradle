@@ -27,6 +27,9 @@ buildscript {
 
         //google services dependency versions
         googleServicesVersion = '3.2.0'
+
+        //FAB
+        FABVersion = '1.10.1'
     }
 
     repositories {

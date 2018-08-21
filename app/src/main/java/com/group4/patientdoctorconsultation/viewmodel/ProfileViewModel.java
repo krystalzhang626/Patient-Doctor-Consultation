@@ -19,19 +19,19 @@ public class ProfileViewModel extends ViewModel implements FirebaseAuth.AuthStat
     private String profileId;
     private LiveData<FirestoreResource<Profile>> profile;
 
-    ProfileViewModel(ProfileRepository profileRepository) {
+    ProfileViewModel(ProfileRepository profileRepository, FirebaseAuth firebaseAuth) {
         this.profileRepository = profileRepository;
         isSignedIn = new MutableLiveData<Boolean>(){
             @Override
             protected void onActive() {
                 super.onActive();
-                FirebaseAuth.getInstance().addAuthStateListener(ProfileViewModel.this);
+                firebaseAuth.addAuthStateListener(ProfileViewModel.this);
             }
 
             @Override
             protected void onInactive() {
                 super.onInactive();
-                FirebaseAuth.getInstance().removeAuthStateListener(ProfileViewModel.this);
+                firebaseAuth.removeAuthStateListener(ProfileViewModel.this);
             }
         };
     }

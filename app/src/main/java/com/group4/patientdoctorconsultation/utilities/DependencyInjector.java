@@ -1,8 +1,12 @@
 package com.group4.patientdoctorconsultation.utilities;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.group4.patientdoctorconsultation.repository.DataPacketRepository;
 import com.group4.patientdoctorconsultation.repository.ProfileRepository;
+import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModel;
+import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModelFactory;
 import com.group4.patientdoctorconsultation.viewmodel.ProfileViewModelFactory;
 
 public class DependencyInjector {
@@ -19,12 +23,28 @@ public class DependencyInjector {
         return firestore;
     }
 
+    private static FirebaseAuth getFirebaseAuth(){
+        return FirebaseAuth.getInstance();
+    }
+
     private static ProfileRepository getProfileRepository() {
         return ProfileRepository.getInstance(getFirestore());
     }
 
+    private static DataPacketRepository getDataPacketRepository(){
+        return DataPacketRepository.getInstance(getFirestore());
+    }
+
     public static ProfileViewModelFactory provideProfileViewModelFactory(){
-        return new ProfileViewModelFactory(getProfileRepository());
+        return new ProfileViewModelFactory(getProfileRepository(), getFirebaseAuth());
+    }
+
+    public static DataPacketViewModelFactory provideDataPacketViewModelFactory(String profileId){
+        return new DataPacketViewModelFactory(getDataPacketRepository(), profileId);
+    }
+
+    public static DataPacketViewModelFactory provideDataPacketViewModelFactory(){
+        return new DataPacketViewModelFactory(getDataPacketRepository());
     }
 
 }
