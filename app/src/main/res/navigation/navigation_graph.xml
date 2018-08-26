@@ -13,6 +13,10 @@
             android:id="@+id/action_home_to_data_packets"
             app:destination="@id/fragment_data_packets" />
 
+        <action
+            android:id="@+id/action_home_to_data_packet"
+            app:destination="@id/fragment_data_packet" />
+
     </fragment>
 
     <fragment

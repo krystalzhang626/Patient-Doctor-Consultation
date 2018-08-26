@@ -22,16 +22,14 @@ import com.group4.patientdoctorconsultation.utilities.DependencyInjector;
 import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModel;
 import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModelFactory;
 
-public class DataPacketListFragment extends Fragment {
-
-    PacketAdapter packetAdapter;
+public class DataPacketListFragment extends FirestoreFragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_data_packets, container, false);
+        View view = inflater.inflate(R.layout.fragment_data_packet_list, container, false);
 
-        packetAdapter = new PacketAdapter(packet -> Toast.makeText(requireContext(), packet.getPatientId(), Toast.LENGTH_LONG).show());
+        PacketAdapter packetAdapter = new PacketAdapter(packet -> Toast.makeText(requireContext(), packet.getPatientId(), Toast.LENGTH_LONG).show());
         RecyclerView packetList = view.findViewById(R.id.data_packet_list);
         packetList.setLayoutManager(new LinearLayoutManager(requireContext()));
         packetList.setAdapter(packetAdapter);
@@ -45,27 +43,8 @@ public class DataPacketListFragment extends Fragment {
         return view;
     }
 
-    private boolean handleFirestoreResult(FirestoreResource resource){
-        if(resource == null || (resource.getResource() == null && resource.getError() == null)){
-            throw new IllegalStateException("Null result passed from Firestore Resource");
-        }
-
-        if(resource.isSuccessful()){
-            return true;
-        }else {
-            Log.w("TAG", resource.getError());
-            Toast.makeText(
-                    requireContext(), resource.getError().getMessage(),
-                    Toast.LENGTH_LONG)
-                    .show();
-            return false;
-        }
-    }
-
     private DataPacketViewModel getViewModel() {
-        DataPacketViewModelFactory dataPacketViewModelFactory = DependencyInjector.provideDataPacketViewModelFactory(
-                FirebaseAuth.getInstance().getUid()
-        );
+        DataPacketViewModelFactory dataPacketViewModelFactory = DependencyInjector.provideDataPacketViewModelFactory();
 
         return ViewModelProviders
                 .of(requireActivity(), dataPacketViewModelFactory)

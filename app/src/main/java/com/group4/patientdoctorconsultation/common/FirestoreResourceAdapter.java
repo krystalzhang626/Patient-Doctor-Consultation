@@ -11,10 +11,10 @@ import java.util.Objects;
 public abstract class FirestoreResourceAdapter<T, V extends ViewDataBinding>
         extends RecyclerView.Adapter<FirestoreResourceViewHolder<V>> {
 
-    protected final FirestoreResourceClickListener<T> clickListener;
+    protected final ClickListener<T> clickListener;
     private List<T> listItems;
 
-    public FirestoreResourceAdapter(final FirestoreResourceClickListener<T> listener) {
+    public FirestoreResourceAdapter(final ClickListener<T> listener) {
         this.clickListener = Objects.requireNonNull(listener);
     }
 

@@ -6,13 +6,13 @@ import android.view.ViewGroup;
 
 import com.group4.patientdoctorconsultation.R;
 import com.group4.patientdoctorconsultation.common.FirestoreResourceAdapter;
-import com.group4.patientdoctorconsultation.common.FirestoreResourceClickListener;
+import com.group4.patientdoctorconsultation.common.ClickListener;
 import com.group4.patientdoctorconsultation.databinding.ItemDataPacketBinding;
 import com.group4.patientdoctorconsultation.model.DataPacket;
 
 public class PacketAdapter extends FirestoreResourceAdapter<DataPacket, ItemDataPacketBinding> {
 
-    public PacketAdapter(FirestoreResourceClickListener<DataPacket> clickListener){
+    public PacketAdapter(ClickListener<DataPacket> clickListener){
         super(clickListener);
     }
 

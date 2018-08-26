@@ -39,12 +39,8 @@ public class DependencyInjector {
         return new ProfileViewModelFactory(getProfileRepository(), getFirebaseAuth());
     }
 
-    public static DataPacketViewModelFactory provideDataPacketViewModelFactory(String profileId){
-        return new DataPacketViewModelFactory(getDataPacketRepository(), profileId);
-    }
-
     public static DataPacketViewModelFactory provideDataPacketViewModelFactory(){
-        return new DataPacketViewModelFactory(getDataPacketRepository());
+        return new DataPacketViewModelFactory(getDataPacketRepository(), getFirebaseAuth());
     }
 
 }

@@ -19,7 +19,7 @@ import com.group4.patientdoctorconsultation.utilities.DependencyInjector;
 import com.group4.patientdoctorconsultation.viewmodel.ProfileViewModel;
 import com.group4.patientdoctorconsultation.viewmodel.ProfileViewModelFactory;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends FirestoreFragment {
 
     public static final String TAG = ProfileFragment.class.getSimpleName();
 
@@ -50,23 +50,6 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(requireContext(), "Saved",Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    private boolean handleFirestoreResult(FirestoreResource resource){
-        if(resource == null || (resource.getResource() == null && resource.getError() == null)){
-            throw new IllegalStateException("Null result passed from Firestore Resource");
-        }
-
-        if(resource.isSuccessful()){
-            return true;
-        }else {
-            Log.w(TAG, resource.getError());
-            Toast.makeText(
-                    requireContext(), resource.getError().getMessage(),
-                    Toast.LENGTH_LONG)
-                    .show();
-            return false;
-        }
     }
 
     private ProfileViewModel getViewModel() {

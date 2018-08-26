@@ -3,7 +3,7 @@ package com.group4.patientdoctorconsultation.model;
 import java.util.Collections;
 import java.util.List;
 
-public class Profile {
+public class Profile extends FirestoreResourceModel {
 
     public static final String COLLECTION_NAME = "profiles";
 

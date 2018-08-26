@@ -7,8 +7,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.group4.patientdoctorconsultation.model.FirestoreResourceModel;
 
-public class LiveDocument<T> extends LiveData<FirestoreResource<T>> implements EventListener<DocumentSnapshot> {
+public class LiveDocument<T extends FirestoreResourceModel>
+        extends LiveData<FirestoreResource<T>> implements EventListener<DocumentSnapshot> {
 
     private ListenerRegistration listenerRegistration;
     private final DocumentReference documentReference;
@@ -24,7 +26,11 @@ public class LiveDocument<T> extends LiveData<FirestoreResource<T>> implements E
         if (e != null) {
             setValue(new FirestoreResource<>(e));
         }else {
-            setValue(new FirestoreResource<>(snapshot.toObject(objectType)));
+            T object = snapshot.toObject(objectType);
+            if (object != null){
+                object.setId(snapshot.getId());
+            }
+            setValue(new FirestoreResource<>(object));
         }
     }
 

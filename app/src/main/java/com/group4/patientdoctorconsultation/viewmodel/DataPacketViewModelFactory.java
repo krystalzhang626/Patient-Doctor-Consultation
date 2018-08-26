@@ -4,17 +4,18 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.group4.patientdoctorconsultation.repository.DataPacketRepository;
 
 
 public class DataPacketViewModelFactory implements ViewModelProvider.Factory {
 
     private DataPacketRepository dataPacketRepository;
-    private String profileId;
+    private FirebaseAuth firebaseAuth;
 
-    public DataPacketViewModelFactory(DataPacketRepository dataPacketRepository, String profileId) {
+    public DataPacketViewModelFactory(DataPacketRepository dataPacketRepository, FirebaseAuth firebaseAuth) {
         this.dataPacketRepository = dataPacketRepository;
-        this.profileId = profileId;
+        this.firebaseAuth = firebaseAuth;
     }
 
     @NonNull
@@ -22,7 +23,7 @@ public class DataPacketViewModelFactory implements ViewModelProvider.Factory {
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if(modelClass.isAssignableFrom(DataPacketViewModel.class)){
-            return (T) new DataPacketViewModel(dataPacketRepository, profileId);
+            return (T) new DataPacketViewModel(dataPacketRepository, firebaseAuth);
         }else{
             throw new IllegalArgumentException("View Model not found");
         }

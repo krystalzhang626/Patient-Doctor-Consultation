@@ -2,7 +2,7 @@ package com.group4.patientdoctorconsultation.model;
 
 import java.util.List;
 
-public class DataPacket {
+public class DataPacket extends FirestoreResourceModel{
 
     public static final String COLLECTION_NAME = "data_packets";
     public static final String FIELD_DOCTOR_ID = "doctorId";
@@ -10,9 +10,11 @@ public class DataPacket {
     public static final String FIELD_DOCUMENT_REFERENCES = "documentReferences";
     public static final String FIELD_NOTES = "notes";
     public static final String FIELD_COMMENTS = "comments";
+    public static final String FIELD_TITLE = "title";
 
     private String doctorId;
     private String patientId;
+    private String title;
     private List<String> documentReferences;
     private List<String> notes;
     private List<String> comments;
@@ -32,6 +34,14 @@ public class DataPacket {
 
     public void setPatientId(String patientId) {
         this.patientId = patientId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public List<String> getDocumentReferences() {

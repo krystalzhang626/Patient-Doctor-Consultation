@@ -2,8 +2,10 @@ package com.group4.patientdoctorconsultation.repository;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.group4.patientdoctorconsultation.common.LiveDocument;
 import com.group4.patientdoctorconsultation.common.LiveQuery;
 import com.group4.patientdoctorconsultation.model.DataPacket;
+import com.group4.patientdoctorconsultation.model.Profile;
 
 public class DataPacketRepository {
 
@@ -19,6 +21,13 @@ public class DataPacketRepository {
                 dataPacketCollection
                         .whereEqualTo(DataPacket.FIELD_PATIENT_ID, patientId)
                 , DataPacket.class);
+    }
+
+    public LiveDocument<DataPacket> getDataPacketById(String patientId){
+        return new LiveDocument<>(
+                dataPacketCollection.document(patientId),
+                DataPacket.class
+        );
     }
 
     public static synchronized DataPacketRepository getInstance(FirebaseFirestore firestore){

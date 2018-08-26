@@ -9,12 +9,13 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.group4.patientdoctorconsultation.model.FirestoreResourceModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public final class LiveQuery<T>
+public final class LiveQuery<T extends FirestoreResourceModel>
         extends LiveData<FirestoreResource<List<T>>> implements EventListener<QuerySnapshot> {
 
     private final Query query;
@@ -55,7 +56,11 @@ public final class LiveQuery<T>
         final List<T> convertedList = new ArrayList<>();
 
         for (DocumentSnapshot document : snapshots.getDocuments()) {
-            convertedList.add(document.toObject(type));
+            T object = document.toObject(type);
+            if (object != null){
+                object.setId(document.getId());
+            }
+            convertedList.add(object);
         }
 
         return convertedList;
