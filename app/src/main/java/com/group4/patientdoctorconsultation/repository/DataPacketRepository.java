@@ -1,9 +1,13 @@
 package com.group4.patientdoctorconsultation.repository;
 
+import android.provider.ContactsContract;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.group4.patientdoctorconsultation.common.LiveCompleteListener;
 import com.group4.patientdoctorconsultation.common.LiveDocument;
 import com.group4.patientdoctorconsultation.common.LiveQuery;
+import com.group4.patientdoctorconsultation.common.LiveAdditionListener;
 import com.group4.patientdoctorconsultation.model.DataPacket;
 
 public class DataPacketRepository {
@@ -27,6 +31,26 @@ public class DataPacketRepository {
                 dataPacketCollection.document(patientId),
                 DataPacket.class
         );
+    }
+
+    public LiveAdditionListener addDataPacket(String profileId, String title){
+        LiveAdditionListener liveAdditionListener = new LiveAdditionListener();
+        DataPacket dataPacket = new DataPacket();
+        dataPacket.setPatientId(profileId);
+        dataPacket.setTitle(title);
+
+        dataPacketCollection
+                .add(dataPacket)
+                .addOnSuccessListener(liveAdditionListener)
+                .addOnFailureListener(liveAdditionListener);
+
+        return liveAdditionListener;
+    }
+
+    public LiveCompleteListener updateDataPacket(DataPacket dataPacket){
+        LiveCompleteListener liveCompleteListener = new LiveCompleteListener();
+        dataPacketCollection.document(dataPacket.getId()).set(dataPacket).addOnCompleteListener(liveCompleteListener);
+        return liveCompleteListener;
     }
 
     public static synchronized DataPacketRepository getInstance(FirebaseFirestore firestore){

@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -27,24 +28,27 @@ import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModel;
 import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModelFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DataPacketFragment extends FirestoreFragment {
 
     PacketItemAdapter packetItemAdapter;
+    FragmentDataPacketBinding binding;
+    DataPacketViewModel viewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragmentDataPacketBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_data_packet, container, false);
-
-        packetItemAdapter = new PacketItemAdapter(packetItem ->{});
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_data_packet, container, false);
+        viewModel = getViewModel();
+        packetItemAdapter = new PacketItemAdapter(packetItem -> {});
 
         binding.packetItemList.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.packetItemList.setAdapter(packetItemAdapter);
 
-        getViewModel().getActivePacket().observe(this, activePacket -> {
-            if(handleFirestoreResult(activePacket)){
+        viewModel.getActivePacket().observe(this, activePacket -> {
+            if (handleFirestoreResult(activePacket)) {
                 updatePacketBinding(activePacket.getResource());
                 binding.setDataPacket(activePacket.getResource());
             }
@@ -56,23 +60,65 @@ public class DataPacketFragment extends FirestoreFragment {
     private void updatePacketBinding(DataPacket newPacket) {
         List<DataPacketItem> dataPacketItems = new ArrayList<>();
 
-        dataPacketItems.add(new DataPacketItem(DataPacketItem.DataPacketItemType.HEART_RATE, newPacket.getHeartRate()));
-
-        for (String documentReference : newPacket.getDocumentReferences()) {
-            dataPacketItems.add(new DataPacketItem(DataPacketItem.DataPacketItemType.DOCUMENT_REFERENCE, documentReference));
+        if (newPacket.getHeartRate() != null) {
+            dataPacketItems.add(new DataPacketItem(DataPacketItem.DataPacketItemType.HEART_RATE, newPacket.getHeartRate()));
         }
 
-        for (String comment : newPacket.getComments()) {
-            dataPacketItems.add(new DataPacketItem(DataPacketItem.DataPacketItemType.COMMENT, comment));
+        if (newPacket.getDocumentReferences() != null) {
+            for (String documentReference : newPacket.getDocumentReferences()) {
+                dataPacketItems.add(new DataPacketItem(DataPacketItem.DataPacketItemType.DOCUMENT_REFERENCE, documentReference));
+            }
         }
 
-        for (String note : newPacket.getNotes()) {
-            dataPacketItems.add(new DataPacketItem(DataPacketItem.DataPacketItemType.NOTE, note));
+        if (newPacket.getComments() != null) {
+            for (String comment : newPacket.getComments()) {
+                dataPacketItems.add(new DataPacketItem(DataPacketItem.DataPacketItemType.COMMENT, comment));
+            }
+        }
+
+        if (newPacket.getNotes() != null) {
+            for (String note : newPacket.getNotes()) {
+                dataPacketItems.add(new DataPacketItem(DataPacketItem.DataPacketItemType.NOTE, note));
+            }
         }
 
         packetItemAdapter.replaceListItems(dataPacketItems);
     }
 
+    private void updateDataPacket() {
+        if (packetItemAdapter == null || packetItemAdapter.getListItems().isEmpty()) {
+            return;
+        }
+
+        DataPacket dataPacket = binding.getDataPacket();
+
+        List<String> documentReferences = new ArrayList<>();
+        List<String> comments = new ArrayList<>();
+        List<String> notes = new ArrayList<>();
+
+        for (DataPacketItem dataPacketItem : packetItemAdapter.getListItems()) {
+            switch (dataPacketItem.getDataPacketItemType()) {
+                case HEART_RATE:
+                    dataPacket.setHeartRate(dataPacketItem.getValue());
+                    break;
+                case DOCUMENT_REFERENCE:
+                    documentReferences.add(dataPacketItem.getValue());
+                    break;
+                case COMMENT:
+                    comments.add(dataPacketItem.getValue());
+                    break;
+                case NOTE:
+                    notes.add(dataPacketItem.getValue());
+                    break;
+            }
+        }
+
+        dataPacket.setDocumentReferences(documentReferences);
+        dataPacket.setComments(comments);
+        dataPacket.setNotes(notes);
+
+        viewModel.updateDataPacket(dataPacket);
+    }
 
     private DataPacketViewModel getViewModel() {
         DataPacketViewModelFactory dataPacketViewModelFactory = DependencyInjector.provideDataPacketViewModelFactory();

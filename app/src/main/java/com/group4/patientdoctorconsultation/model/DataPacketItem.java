@@ -39,19 +39,19 @@ public class DataPacketItem {
     private void setIconResourceId() {
         switch(dataPacketItemType){
             case HEART_RATE:
-                iconResourceId = R.drawable.ic_favorite_white_24dp;
+                iconResourceId = R.drawable.ic_favorite_black_24dp;
                 break;
             case DOCUMENT_REFERENCE:
-                iconResourceId = R.drawable.ic_attach_file_white_24dp;
+                iconResourceId = R.drawable.ic_attach_file_black_24dp;
                 break;
             case LOCATION:
-                iconResourceId = R.drawable.ic_location_on_white_24dp;
+                iconResourceId = R.drawable.ic_location_on_black_24dp;
                 break;
             case COMMENT:
-                iconResourceId = R.drawable.ic_text_fields_white_24dp;
+                iconResourceId = R.drawable.ic_text_fields_black_24dp;
                 break;
             case NOTE:
-                iconResourceId = R.drawable.ic_text_fields_white_24dp;
+                iconResourceId = R.drawable.ic_text_fields_black_24dp;
                 break;
         }
     }

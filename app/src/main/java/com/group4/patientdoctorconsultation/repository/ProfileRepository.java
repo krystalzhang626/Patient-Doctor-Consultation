@@ -22,9 +22,9 @@ public class ProfileRepository {
         );
     }
 
-    public LiveCompleteListener updateProfile(String userId, Profile profile){
+    public LiveCompleteListener updateProfile(Profile profile){
         LiveCompleteListener liveCompleteListener = new LiveCompleteListener();
-        profileCollection.document(userId).set(profile).addOnCompleteListener(liveCompleteListener);
+        profileCollection.document(profile.getId()).set(profile).addOnCompleteListener(liveCompleteListener);
         return liveCompleteListener;
     }
 

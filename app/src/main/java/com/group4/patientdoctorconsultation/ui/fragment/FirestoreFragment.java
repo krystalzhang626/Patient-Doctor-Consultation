@@ -13,7 +13,7 @@ public abstract class FirestoreFragment extends Fragment {
             throw new IllegalStateException("Null result passed from Firestore Resource");
         }
 
-        if(resource.isSuccessful()){
+        if(resource.isSuccessful() && resource.getResource() != null){
             return true;
         }else {
             Log.w("TAG", resource.getError());

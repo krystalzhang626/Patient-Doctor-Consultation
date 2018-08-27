@@ -41,6 +41,10 @@ public abstract class BindingAdapter<L, B extends ViewDataBinding>
         notifyDataSetChanged();
     }
 
+    public List<L> getListItems(){
+        return listItems;
+    }
+
     protected abstract B createBinding(LayoutInflater inflater, ViewGroup parent);
     protected abstract void bind(B binding, L item);
 

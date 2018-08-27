@@ -8,12 +8,16 @@ import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.group4.patientdoctorconsultation.common.FirestoreResource;
+import com.group4.patientdoctorconsultation.common.LiveAdditionListener;
+import com.group4.patientdoctorconsultation.common.LiveCompleteListener;
 import com.group4.patientdoctorconsultation.model.DataPacket;
 import com.group4.patientdoctorconsultation.repository.DataPacketRepository;
 
 import java.util.List;
 
 public class DataPacketViewModel extends ViewModel implements FirebaseAuth.AuthStateListener {
+
+    private final DataPacketRepository dataPacketRepository;
 
     private final FirebaseAuth firebaseAuth;
     private final MutableLiveData<String> profileId = new MutableLiveData<>();
@@ -24,6 +28,7 @@ public class DataPacketViewModel extends ViewModel implements FirebaseAuth.AuthS
 
 
     DataPacketViewModel(DataPacketRepository dataPacketRepository, FirebaseAuth firebaseAuth) {
+        this.dataPacketRepository = dataPacketRepository;
         this.firebaseAuth = firebaseAuth;
         firebaseAuth.addAuthStateListener(this);
 
@@ -45,14 +50,23 @@ public class DataPacketViewModel extends ViewModel implements FirebaseAuth.AuthS
         super.onCleared();
     }
 
-    public void setActivePacketId(String activePacketId){
-        this.activePacketId.setValue(activePacketId);
+    public LiveCompleteListener updateDataPacket(DataPacket dataPacket){
+        return dataPacketRepository.updateDataPacket(dataPacket);
     }
 
     public LiveData<FirestoreResource<List<DataPacket>>> getDataPackets(){
         return dataPackets;
     }
+
     public LiveData<FirestoreResource<DataPacket>> getActivePacket() {
         return activePacket;
+    }
+
+    public LiveAdditionListener addDataPacket(String title){
+        return dataPacketRepository.addDataPacket(profileId.getValue(), title);
+    }
+
+    public void setActivePacketId(String activePacketId){
+        this.activePacketId.setValue(activePacketId);
     }
 }

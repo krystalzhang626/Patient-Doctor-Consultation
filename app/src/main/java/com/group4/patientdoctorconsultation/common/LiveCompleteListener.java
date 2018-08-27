@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class LiveCompleteListener extends LiveData<FirestoreResource<Boolean>> implements OnCompleteListener {
+public class LiveCompleteListener extends LiveData<FirestoreResource<Boolean>> implements OnCompleteListener<Void> {
 
     @Override
     public void onComplete(@NonNull Task task) {

@@ -30,40 +30,6 @@ public class Profile extends FirestoreResourceModel {
     private String weightInKg;
     private List<String> medicalConditions;
 
-    public Profile() { // No argument constructor for firestore
-        profileType = "";
-        userName = "";
-        firstName = "";
-        lastName = "";
-        gender = "";
-        ageInYears = 0;
-        heightInCentimetres = "";
-        weightInKg = "";
-        medicalConditions = Collections.emptyList();
-    }
-
-    public Profile(
-            String userReference,
-            String profileType,
-            String userName,
-            String firstName,
-            String lastName,
-            String gender,
-            int ageInYears,
-            String heightInCentimetres,
-            String weightInKg,
-            List<String> medicalConditions) {
-        this.profileType = profileType;
-        this.userName = userName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.ageInYears = ageInYears;
-        this.heightInCentimetres = heightInCentimetres;
-        this.weightInKg = weightInKg;
-        this.medicalConditions = medicalConditions;
-    }
-
     public String getProfileType() {
         return profileType;
     }

@@ -16,12 +16,11 @@ public class ProfileViewModel extends ViewModel implements FirebaseAuth.AuthStat
     private ProfileRepository profileRepository;
     private MutableLiveData<Boolean> isSignedIn;
 
-    private String profileId;
     private LiveData<FirestoreResource<Profile>> profile;
 
     ProfileViewModel(ProfileRepository profileRepository, FirebaseAuth firebaseAuth) {
         this.profileRepository = profileRepository;
-        isSignedIn = new MutableLiveData<Boolean>(){
+        isSignedIn = new MutableLiveData<Boolean>() {
             @Override
             protected void onActive() {
                 super.onActive();
@@ -42,22 +41,19 @@ public class ProfileViewModel extends ViewModel implements FirebaseAuth.AuthStat
 
         isSignedIn.setValue(signedIn);
 
-        if(signedIn){
-            profileId = firebaseAuth.getCurrentUser().getUid();
-            profile = profileRepository.profileFromUserId(profileId);
+        if (signedIn) {
+            profile = profileRepository.profileFromUserId(firebaseAuth.getCurrentUser().getUid());
         }
     }
 
-    public LiveCompleteListener updateProfile(Profile profile){
-        if(profileId != null){
-            return profileRepository.updateProfile(profileId, profile);
-        }
-        return null;
+    public LiveCompleteListener updateProfile(Profile profile) {
+        return profileRepository.updateProfile(profile);
     }
 
     public LiveData<Boolean> getIsSignedIn() {
         return isSignedIn;
     }
+
     public LiveData<FirestoreResource<Profile>> getProfile() {
         return profile;
     }
