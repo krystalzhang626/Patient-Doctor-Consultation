@@ -5,7 +5,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.group4.patientdoctorconsultation.common.LiveDocument;
 import com.group4.patientdoctorconsultation.common.LiveQuery;
 import com.group4.patientdoctorconsultation.model.DataPacket;
-import com.group4.patientdoctorconsultation.model.Profile;
 
 public class DataPacketRepository {
 

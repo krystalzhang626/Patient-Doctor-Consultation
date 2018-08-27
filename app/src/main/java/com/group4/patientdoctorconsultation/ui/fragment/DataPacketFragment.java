@@ -28,7 +28,11 @@ public class DataPacketFragment extends FirestoreFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentDataPacketBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_data_packet, container, false);
 
-
+        getViewModel().getActivePacket().observe(this, activePacket -> {
+            if(handleFirestoreResult(activePacket)){
+                binding.setDataPacket(activePacket.getResource());
+            }
+        });
 
         return binding.getRoot();
     }

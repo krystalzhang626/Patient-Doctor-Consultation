@@ -52,4 +52,7 @@ public class DataPacketViewModel extends ViewModel implements FirebaseAuth.AuthS
     public LiveData<FirestoreResource<List<DataPacket>>> getDataPackets(){
         return dataPackets;
     }
+    public LiveData<FirestoreResource<DataPacket>> getActivePacket() {
+        return activePacket;
+    }
 }

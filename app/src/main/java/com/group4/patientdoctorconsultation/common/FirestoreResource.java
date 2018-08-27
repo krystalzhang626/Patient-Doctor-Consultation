@@ -5,11 +5,11 @@ public class FirestoreResource<T> {
     private final T resource;
     private final Exception error;
 
-    public FirestoreResource(T resource) {
+    FirestoreResource(T resource) {
         this(resource, null);
     }
 
-    public FirestoreResource(Exception error) {
+    FirestoreResource(Exception error) {
         this(null, error);
     }
 

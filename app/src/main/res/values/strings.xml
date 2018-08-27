@@ -19,4 +19,8 @@
     <string name="profile_hint_first_name">John</string>
     <string name="profile_hint_height">185</string>
     <string name="submit">Submit</string>
+    <string name="home_card_title_data_packet">Data Packets</string>
+    <string name="home_card_title_doctors">Doctors</string>
+    <string name="home_card_title_nearby">Nearby</string>
+    <string name="add">+</string>
 </resources>

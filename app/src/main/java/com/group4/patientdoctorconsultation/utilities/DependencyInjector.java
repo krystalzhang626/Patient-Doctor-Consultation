@@ -5,7 +5,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.group4.patientdoctorconsultation.repository.DataPacketRepository;
 import com.group4.patientdoctorconsultation.repository.ProfileRepository;
-import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModel;
 import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModelFactory;
 import com.group4.patientdoctorconsultation.viewmodel.ProfileViewModelFactory;
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -41,6 +42,7 @@ public class HomeFragment extends FirestoreFragment {
             viewModel.setActivePacketId(packet.getId());
             Navigation.findNavController(view).navigate(R.id.action_home_to_data_packet);
         });
+
         RecyclerView packetList = view.findViewById(R.id.data_packet_list);
         packetList.setLayoutManager(new LinearLayoutManager(requireContext()));
         packetList.setAdapter(packetAdapter);
