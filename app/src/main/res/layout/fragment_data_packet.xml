@@ -19,8 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
             fab:fab_colorNormal="@color/colorAccent"
             fab:fab_addButtonColorNormal="@color/colorAccent">
 
@@ -72,23 +72,13 @@
                 android:text="@{dataPacket.title}"
                 tools:text="Packet Title"/>
 
-            <TextView
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/packet_item_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{dataPacket.heartRate}"
-                tools:text="Packet Title"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{dataPacket.noteString}"
-                tools:text="Packet Title"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{dataPacket.commentString}"
-                tools:text="Packet Title"/>
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                tools:listitem="@layout/item_data_packet_item"
+                tools:itemCount="5"/>
 
         </LinearLayout>
 

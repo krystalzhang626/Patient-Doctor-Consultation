@@ -5,12 +5,12 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.group4.patientdoctorconsultation.R;
-import com.group4.patientdoctorconsultation.common.FirestoreResourceAdapter;
+import com.group4.patientdoctorconsultation.common.BindingAdapter;
 import com.group4.patientdoctorconsultation.common.ClickListener;
 import com.group4.patientdoctorconsultation.databinding.ItemDataPacketBinding;
 import com.group4.patientdoctorconsultation.model.DataPacket;
 
-public class PacketAdapter extends FirestoreResourceAdapter<DataPacket, ItemDataPacketBinding> {
+public class PacketAdapter extends BindingAdapter<DataPacket, ItemDataPacketBinding> {
 
     public PacketAdapter(ClickListener<DataPacket> clickListener){
         super(clickListener);
@@ -29,8 +29,8 @@ public class PacketAdapter extends FirestoreResourceAdapter<DataPacket, ItemData
     }
 
     @Override
-    protected void bind(ItemDataPacketBinding binding, DataPacket item) {
-        binding.setDataPacket(item);
+    protected void bind(ItemDataPacketBinding binding, DataPacket dataPacket) {
+        binding.setDataPacket(dataPacket);
     }
 
 }
