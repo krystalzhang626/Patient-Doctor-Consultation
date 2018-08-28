@@ -1,4 +1,4 @@
-package com.group4.patientdoctorconsultation.model;
+package com.group4.patientdoctorconsultation.common;
 
 import com.google.firebase.firestore.Exclude;
 

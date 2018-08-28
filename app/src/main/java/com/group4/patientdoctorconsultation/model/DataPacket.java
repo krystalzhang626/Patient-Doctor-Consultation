@@ -1,5 +1,7 @@
 package com.group4.patientdoctorconsultation.model;
 
+import com.group4.patientdoctorconsultation.common.IndexedFirestoreResource;
+
 import java.util.List;
 
 public class DataPacket extends IndexedFirestoreResource {
