@@ -10,8 +10,8 @@ import com.group4.patientdoctorconsultation.repository.DataPacketRepository;
 
 public class DataPacketViewModelFactory implements ViewModelProvider.Factory {
 
-    private DataPacketRepository dataPacketRepository;
-    private FirebaseAuth firebaseAuth;
+    private final DataPacketRepository dataPacketRepository;
+    private final FirebaseAuth firebaseAuth;
 
     public DataPacketViewModelFactory(DataPacketRepository dataPacketRepository, FirebaseAuth firebaseAuth) {
         this.dataPacketRepository = dataPacketRepository;

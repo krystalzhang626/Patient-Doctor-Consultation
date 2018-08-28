@@ -1,9 +1,8 @@
 package com.group4.patientdoctorconsultation.model;
 
-import java.util.Collections;
 import java.util.List;
 
-public class Profile extends FirestoreResourceModel {
+public class Profile extends IndexedFirestoreResource {
 
     public static final String COLLECTION_NAME = "profiles";
 

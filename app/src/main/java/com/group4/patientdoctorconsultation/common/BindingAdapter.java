@@ -14,7 +14,7 @@ public abstract class BindingAdapter<L, B extends ViewDataBinding>
     protected final ClickListener<L> clickListener;
     private List<L> listItems;
 
-    public BindingAdapter(final ClickListener<L> listener) {
+    protected BindingAdapter(final ClickListener<L> listener) {
         this.clickListener = Objects.requireNonNull(listener);
     }
 

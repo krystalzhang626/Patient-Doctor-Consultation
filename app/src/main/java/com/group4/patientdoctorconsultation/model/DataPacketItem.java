@@ -1,7 +1,5 @@
 package com.group4.patientdoctorconsultation.model;
 
-import android.graphics.drawable.Drawable;
-
 import com.group4.patientdoctorconsultation.R;
 
 public class DataPacketItem {

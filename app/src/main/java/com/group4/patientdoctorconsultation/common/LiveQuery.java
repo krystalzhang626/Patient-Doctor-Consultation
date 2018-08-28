@@ -9,13 +9,13 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.group4.patientdoctorconsultation.model.FirestoreResourceModel;
+import com.group4.patientdoctorconsultation.model.IndexedFirestoreResource;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public final class LiveQuery<T extends FirestoreResourceModel>
+public final class LiveQuery<T extends IndexedFirestoreResource>
         extends LiveData<FirestoreResource<List<T>>> implements EventListener<QuerySnapshot> {
 
     private final Query query;
@@ -28,9 +28,9 @@ public final class LiveQuery<T extends FirestoreResourceModel>
     }
 
     @Override
-    public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
-        if (e != null) {
-            setValue(new FirestoreResource<>(e));
+    public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException exception) {
+        if (exception != null) {
+            setValue(new FirestoreResource<>(exception));
             return;
         }
         setValue(new FirestoreResource<>(documentToList(snapshots)));

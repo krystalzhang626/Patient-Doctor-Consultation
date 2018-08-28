@@ -7,9 +7,7 @@ import android.view.ViewGroup;
 import com.group4.patientdoctorconsultation.R;
 import com.group4.patientdoctorconsultation.common.BindingAdapter;
 import com.group4.patientdoctorconsultation.common.ClickListener;
-import com.group4.patientdoctorconsultation.databinding.ItemDataPacketBinding;
 import com.group4.patientdoctorconsultation.databinding.ItemDataPacketItemBinding;
-import com.group4.patientdoctorconsultation.model.DataPacket;
 import com.group4.patientdoctorconsultation.model.DataPacketItem;
 
 public class PacketItemAdapter extends BindingAdapter<DataPacketItem, ItemDataPacketItemBinding> {

@@ -20,7 +20,7 @@ public class PacketAdapter extends BindingAdapter<DataPacket, ItemDataPacketBind
     protected ItemDataPacketBinding createBinding(LayoutInflater inflater, ViewGroup parent) {
         final ItemDataPacketBinding binding = DataBindingUtil.inflate(inflater, R.layout.item_data_packet, parent, false);
         binding.getRoot().setOnClickListener(v -> {
-            final DataPacket chosen = binding.getDataPacket();
+            DataPacket chosen = binding.getDataPacket();
             if (chosen != null) {
                 clickListener.onClicked(chosen);
             }

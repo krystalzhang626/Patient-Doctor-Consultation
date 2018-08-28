@@ -1,55 +1,61 @@
 package com.group4.patientdoctorconsultation.ui.fragment;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.group4.patientdoctorconsultation.R;
 import com.group4.patientdoctorconsultation.adapter.PacketAdapter;
 import com.group4.patientdoctorconsultation.utilities.DependencyInjector;
 import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModel;
 import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModelFactory;
-import com.group4.patientdoctorconsultation.viewmodel.ProfileViewModel;
-import com.group4.patientdoctorconsultation.viewmodel.ProfileViewModelFactory;
 
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import androidx.navigation.Navigation;
+public class HomeFragment extends FirestoreFragment implements View.OnClickListener {
 
-import androidx.navigation.Navigation;
-
-import androidx.navigation.Navigation;
-
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
-public class HomeFragment extends FirestoreFragment {
+    private DataPacketViewModel viewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        DataPacketViewModel viewModel = getViewModel();
+        viewModel = getViewModel();
 
-        PacketAdapter packetAdapter = new PacketAdapter(packet -> {
-            viewModel.setActivePacketId(packet.getId());
-            Navigation.findNavController(view).navigate(R.id.action_home_to_data_packet);
+        PacketAdapter packetAdapter = new PacketAdapter(packet -> openDataPacket(view, packet.getId()));
+        RecyclerView packetList = view.findViewById(R.id.data_packet_list);
+        packetList.setLayoutManager(new LinearLayoutManager(requireContext()));
+        packetList.setAdapter(packetAdapter);
+
+        viewModel.getDataPackets().observe(this, dataPackets -> {
+            if (dataPackets != null && handleFirestoreResult(dataPackets)) {
+                packetAdapter.replaceListItems(dataPackets.getResource());
+            }
         });
 
-        view.findViewById(R.id.new_packet_card).setOnClickListener(cardView -> {
+        view.findViewById(R.id.new_packet_card).setOnClickListener(this);
+
+        return view;
+    }
+
+    private void openDataPacket(View view, String packetId) {
+        viewModel.setActivePacketId(packetId);
+        Navigation.findNavController(view).navigate(R.id.action_home_to_data_packet);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.new_packet_card){
             final EditText input = new EditText(requireContext());
             input.setHint("Title");
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(requireContext());
@@ -59,27 +65,16 @@ public class HomeFragment extends FirestoreFragment {
                     .setView(input)
                     .setPositiveButton("OK",
                             (dialog, which) ->
-                                    viewModel.addDataPacket(input.getText().toString()).observe(HomeFragment.this, additionResult -> {
-                                        if (handleFirestoreResult(additionResult)) {
-                                            viewModel.setActivePacketId(additionResult.getResource().getId());
-                                            Navigation.findNavController(view).navigate(R.id.action_home_to_data_packet);
-                                        }
-                                    }))
+                                    viewModel
+                                            .addDataPacket(input.getText().toString())
+                                            .observe(HomeFragment.this, additionResult -> {
+                                                if (additionResult != null && handleFirestoreResult(additionResult)) {
+                                                    openDataPacket(view, additionResult.getResource().getId());
+                                                }
+                                            }))
                     .setNegativeButton("CANCEL", (dialog, which) -> dialog.cancel())
                     .show();
-        });
-
-        RecyclerView packetList = view.findViewById(R.id.data_packet_list);
-        packetList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        packetList.setAdapter(packetAdapter);
-
-        viewModel.getDataPackets().observe(this, dataPackets -> {
-            if (handleFirestoreResult(dataPackets)) {
-                packetAdapter.replaceListItems(dataPackets.getResource());
-            }
-        });
-
-        return view;
+        }
     }
 
     private DataPacketViewModel getViewModel() {
@@ -89,5 +84,4 @@ public class HomeFragment extends FirestoreFragment {
                 .of(requireActivity(), dataPacketViewModelFactory)
                 .get(DataPacketViewModel.class);
     }
-
 }

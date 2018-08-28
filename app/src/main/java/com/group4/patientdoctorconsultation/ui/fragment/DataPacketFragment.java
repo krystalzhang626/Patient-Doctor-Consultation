@@ -2,24 +2,18 @@ package com.group4.patientdoctorconsultation.ui.fragment;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.group4.patientdoctorconsultation.R;
 import com.group4.patientdoctorconsultation.adapter.PacketItemAdapter;
-import com.group4.patientdoctorconsultation.common.FirestoreResource;
 import com.group4.patientdoctorconsultation.databinding.FragmentDataPacketBinding;
 import com.group4.patientdoctorconsultation.model.DataPacket;
 import com.group4.patientdoctorconsultation.model.DataPacketItem;
@@ -28,33 +22,36 @@ import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModel;
 import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModelFactory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class DataPacketFragment extends FirestoreFragment {
 
-    PacketItemAdapter packetItemAdapter;
-    FragmentDataPacketBinding binding;
-    DataPacketViewModel viewModel;
+    private PacketItemAdapter packetItemAdapter;
+    private DataPacketViewModel viewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_data_packet, container, false);
-        viewModel = getViewModel();
-        packetItemAdapter = new PacketItemAdapter(packetItem -> {});
 
-        binding.packetItemList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.packetItemList.setAdapter(packetItemAdapter);
+        FragmentDataPacketBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_data_packet, container, false);
+        viewModel = getViewModel();
+
+        initialisePacketItemList(binding.packetItemList);
 
         viewModel.getActivePacket().observe(this, activePacket -> {
-            if (handleFirestoreResult(activePacket)) {
+            if (activePacket != null && handleFirestoreResult(activePacket)) {
                 updatePacketBinding(activePacket.getResource());
                 binding.setDataPacket(activePacket.getResource());
             }
         });
 
         return binding.getRoot();
+    }
+
+    private void initialisePacketItemList(RecyclerView packetItemList) {
+        packetItemAdapter = new PacketItemAdapter(packetItem -> {});
+        packetItemList.setLayoutManager(new LinearLayoutManager(requireContext()));
+        packetItemList.setAdapter(packetItemAdapter);
     }
 
     private void updatePacketBinding(DataPacket newPacket) {
@@ -85,18 +82,16 @@ public class DataPacketFragment extends FirestoreFragment {
         packetItemAdapter.replaceListItems(dataPacketItems);
     }
 
-    private void updateDataPacket() {
-        if (packetItemAdapter == null || packetItemAdapter.getListItems().isEmpty()) {
+    private void updateDataPacket(DataPacket dataPacket, List<DataPacketItem> packetItems) {
+        if (packetItems == null || packetItems.isEmpty()) {
             return;
         }
-
-        DataPacket dataPacket = binding.getDataPacket();
 
         List<String> documentReferences = new ArrayList<>();
         List<String> comments = new ArrayList<>();
         List<String> notes = new ArrayList<>();
 
-        for (DataPacketItem dataPacketItem : packetItemAdapter.getListItems()) {
+        for (DataPacketItem dataPacketItem : packetItems) {
             switch (dataPacketItem.getDataPacketItemType()) {
                 case HEART_RATE:
                     dataPacket.setHeartRate(dataPacketItem.getValue());
@@ -117,7 +112,11 @@ public class DataPacketFragment extends FirestoreFragment {
         dataPacket.setComments(comments);
         dataPacket.setNotes(notes);
 
-        viewModel.updateDataPacket(dataPacket);
+        viewModel.updateDataPacket(dataPacket).observe( this, result -> {
+            if(handleFirestoreResult(result)){
+                Toast.makeText(requireContext(), "Saved", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private DataPacketViewModel getViewModel() {

@@ -9,8 +9,8 @@ import com.group4.patientdoctorconsultation.repository.ProfileRepository;
 
 public class ProfileViewModelFactory implements ViewModelProvider.Factory {
 
-    private ProfileRepository profileRepository;
-    private FirebaseAuth firebaseAuth;
+    private final ProfileRepository profileRepository;
+    private final FirebaseAuth firebaseAuth;
 
     public ProfileViewModelFactory(ProfileRepository profileRepository, FirebaseAuth firebaseAuth) {
         this.profileRepository = profileRepository;

@@ -8,14 +8,14 @@ import com.group4.patientdoctorconsultation.common.FirestoreResource;
 
 public abstract class FirestoreFragment extends Fragment {
 
-    protected boolean handleFirestoreResult(FirestoreResource resource){
+    boolean handleFirestoreResult(FirestoreResource resource){
         if(resource == null || (resource.getResource() == null && resource.getError() == null)){
             throw new IllegalStateException("Null result passed from Firestore Resource");
         }
 
         if(resource.isSuccessful() && resource.getResource() != null){
             return true;
-        }else {
+        }else if(resource.getError() != null) {
             Log.w("TAG", resource.getError());
             Toast.makeText(
                     requireContext(), resource.getError().getMessage(),
@@ -23,6 +23,8 @@ public abstract class FirestoreFragment extends Fragment {
                     .show();
             return false;
         }
+
+        return false;
     }
 
 }

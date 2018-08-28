@@ -1,11 +1,8 @@
 package com.group4.patientdoctorconsultation.model;
 
-import com.google.common.base.Joiner;
-import com.google.firebase.firestore.Exclude;
-
 import java.util.List;
 
-public class DataPacket extends FirestoreResourceModel{
+public class DataPacket extends IndexedFirestoreResource {
 
     public static final String COLLECTION_NAME = "data_packets";
     public static final String FIELD_DOCTOR_ID = "doctorId";

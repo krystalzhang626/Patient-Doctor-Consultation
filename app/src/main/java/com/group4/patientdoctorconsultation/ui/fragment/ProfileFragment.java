@@ -5,15 +5,12 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.group4.patientdoctorconsultation.R;
-import com.group4.patientdoctorconsultation.common.FirestoreResource;
 import com.group4.patientdoctorconsultation.databinding.FragmentProfileBinding;
 import com.group4.patientdoctorconsultation.utilities.DependencyInjector;
 import com.group4.patientdoctorconsultation.viewmodel.ProfileViewModel;
@@ -21,10 +18,8 @@ import com.group4.patientdoctorconsultation.viewmodel.ProfileViewModelFactory;
 
 public class ProfileFragment extends FirestoreFragment {
 
-    public static final String TAG = ProfileFragment.class.getSimpleName();
-
-    ProfileViewModel viewModel;
-    FragmentProfileBinding binding;
+    private ProfileViewModel viewModel;
+    private FragmentProfileBinding binding;
 
     @NonNull
     @Override
@@ -38,7 +33,7 @@ public class ProfileFragment extends FirestoreFragment {
     private void observeProfile(){
         viewModel = getViewModel();
         viewModel.getProfile().observe(this, profile -> {
-            if(handleFirestoreResult(profile)){
+            if(profile != null && handleFirestoreResult(profile)){
                 binding.setProfile(profile.getResource());
             }
         });

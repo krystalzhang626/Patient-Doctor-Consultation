@@ -1,13 +1,11 @@
 package com.group4.patientdoctorconsultation.repository;
 
-import android.provider.ContactsContract;
-
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.group4.patientdoctorconsultation.common.LiveAdditionListener;
 import com.group4.patientdoctorconsultation.common.LiveCompleteListener;
 import com.group4.patientdoctorconsultation.common.LiveDocument;
 import com.group4.patientdoctorconsultation.common.LiveQuery;
-import com.group4.patientdoctorconsultation.common.LiveAdditionListener;
 import com.group4.patientdoctorconsultation.model.DataPacket;
 
 public class DataPacketRepository {
@@ -53,6 +51,7 @@ public class DataPacketRepository {
         return liveCompleteListener;
     }
 
+    //Singleton instantiation - probably should be thread safe
     public static synchronized DataPacketRepository getInstance(FirebaseFirestore firestore){
         if(instance == null){
             instance = new DataPacketRepository(firestore);

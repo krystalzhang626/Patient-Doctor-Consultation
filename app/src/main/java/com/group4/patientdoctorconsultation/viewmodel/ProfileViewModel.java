@@ -13,8 +13,8 @@ import com.group4.patientdoctorconsultation.repository.ProfileRepository;
 
 public class ProfileViewModel extends ViewModel implements FirebaseAuth.AuthStateListener {
 
-    private ProfileRepository profileRepository;
-    private MutableLiveData<Boolean> isSignedIn;
+    private final ProfileRepository profileRepository;
+    private final MutableLiveData<Boolean> isSignedIn;
 
     private LiveData<FirestoreResource<Profile>> profile;
 
