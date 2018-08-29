@@ -3,44 +3,40 @@ package com.group4.patientdoctorconsultation.common;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.group4.patientdoctorconsultation.model.DataPacketItem;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public abstract class PacketItemDialog extends DialogFragment {
+
+    public static final String EXTRA_RESULT = "extra_result";
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        if (getActivity() == null){
-            throw new NullPointerException("PacketItemDialog must implement activity");
-        }
-
-        if(!(getActivity() instanceof PacketItemResultListener)){
-            throw new IllegalStateException(getActivity().toString() + " must extend PacketItemResultListener");
+        if (getTargetFragment() == null){
+            throw new NullPointerException("PacketItemDialog must implement fragment");
         }
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle(getItemType().toString())
-                .setView(getDialogView())
+                .setTitle(getPacketItemType().toString())
+                .setView(getView(getTargetFragment().getLayoutInflater()))
                 .setNegativeButton("CANCEL", (dialog, which) -> dialog.cancel())
                 .setPositiveButton("SAVE", (dialogInterface, i) -> {
-                    Map<DataPacketItem.DataPacketItemType, String> result = new HashMap<DataPacketItem.DataPacketItemType, String>();
-                    result.put(getItemType(), getDialogViewResult());
-                    ((PacketItemResultListener) getActivity()).onResult(result);
+                    Intent result = new Intent();
+                    result.putExtra(EXTRA_RESULT, new DataPacketItem(getPacketItemType(), getDialogResult()));
+                    (getTargetFragment()).onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, result);
                 })
-                .show();
+                .create();
     }
 
-    abstract View getDialogView();
-    abstract String getDialogViewResult();
-    abstract DataPacketItem.DataPacketItemType getItemType();
+    abstract public String getDialogResult();
+    abstract public DataPacketItem.DataPacketItemType getPacketItemType();
+    abstract public View getView(LayoutInflater inflater);
 }

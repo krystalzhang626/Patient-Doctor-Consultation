@@ -15,7 +15,6 @@
         android:layout_height="match_parent">
 
         <com.getbase.floatingactionbutton.FloatingActionsMenu
-            android:id="@+id/multiple_actions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -26,7 +25,7 @@
             fab:fab_colorNormal="@color/colorAccent">
 
             <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/action_a"
+                android:id="@+id/new_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_colorNormal="@color/colorAccent"
@@ -35,7 +34,7 @@
                 fab:fab_title="Action A" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/action_b"
+                android:id="@+id/new_heart_rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_colorNormal="@color/colorAccent"
@@ -44,7 +43,7 @@
                 fab:fab_title="Action A" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/action_c"
+                android:id="@+id/new_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_colorNormal="@color/colorAccent"
@@ -53,7 +52,7 @@
                 fab:fab_title="Action A" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/action_d"
+                android:id="@+id/new_attachment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_colorNormal="@color/colorAccent"
