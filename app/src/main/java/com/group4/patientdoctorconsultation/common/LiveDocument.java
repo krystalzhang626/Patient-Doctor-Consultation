@@ -7,7 +7,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.group4.patientdoctorconsultation.model.IndexedFirestoreResource;
 
 public class LiveDocument<T extends IndexedFirestoreResource>
         extends LiveData<FirestoreResource<T>> implements EventListener<DocumentSnapshot> {
