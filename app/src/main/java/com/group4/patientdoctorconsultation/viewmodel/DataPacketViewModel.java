@@ -13,6 +13,7 @@ import com.group4.patientdoctorconsultation.common.LiveCompleteListener;
 import com.group4.patientdoctorconsultation.model.DataPacket;
 import com.group4.patientdoctorconsultation.repository.DataPacketRepository;
 
+import java.io.InputStream;
 import java.util.List;
 
 public class DataPacketViewModel extends ViewModel implements FirebaseAuth.AuthStateListener {
@@ -68,5 +69,9 @@ public class DataPacketViewModel extends ViewModel implements FirebaseAuth.AuthS
 
     public void setActivePacketId(String activePacketId){
         this.activePacketId.setValue(activePacketId);
+    }
+
+    public void uploadAttachment(String fileName, InputStream inputStream){
+        dataPacketRepository.uploadAttachment(activePacketId.getValue(), fileName, inputStream);
     }
 }

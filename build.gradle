@@ -21,6 +21,7 @@ buildscript {
         firebaseVersion = '16.0.1'
         firebaseUIVersion = '4.1.0'
         firestoreVersion = '17.0.3'
+        firebaseStorageVersion = '16.0.1'
 
         //gradle dependency versions
         gradleVersion = '3.2.0-beta02'

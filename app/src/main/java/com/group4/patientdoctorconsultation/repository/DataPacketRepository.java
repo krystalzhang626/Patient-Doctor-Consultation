@@ -2,19 +2,25 @@ package com.group4.patientdoctorconsultation.repository;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.group4.patientdoctorconsultation.common.LiveAdditionListener;
 import com.group4.patientdoctorconsultation.common.LiveCompleteListener;
 import com.group4.patientdoctorconsultation.common.LiveDocument;
 import com.group4.patientdoctorconsultation.common.LiveQuery;
 import com.group4.patientdoctorconsultation.model.DataPacket;
 
+import java.io.InputStream;
+
 public class DataPacketRepository {
 
     private static DataPacketRepository instance;
     private final CollectionReference dataPacketCollection;
+    private final StorageReference storageReference;
 
-    private DataPacketRepository(FirebaseFirestore firestore) {
+    private DataPacketRepository(FirebaseFirestore firestore, FirebaseStorage firebaseStorage) {
         dataPacketCollection = firestore.collection(DataPacket.COLLECTION_NAME);
+        storageReference = firebaseStorage.getReference();
     }
 
     public LiveQuery<DataPacket> getDataPacketsByPatientId(String patientId){
@@ -51,10 +57,16 @@ public class DataPacketRepository {
         return liveCompleteListener;
     }
 
+    public void uploadAttachment(String packetId, String fileName, InputStream inputStream){
+        StorageReference fileReference = storageReference.child(packetId + "/" + fileName);
+        fileReference.putStream(inputStream);
+        //TODO - Return listeners
+    }
+
     //Singleton instantiation - probably should be thread safe
-    public static synchronized DataPacketRepository getInstance(FirebaseFirestore firestore){
+    public static synchronized DataPacketRepository getInstance(FirebaseFirestore firestore, FirebaseStorage firebaseStorage){
         if(instance == null){
-            instance = new DataPacketRepository(firestore);
+            instance = new DataPacketRepository(firestore, firebaseStorage);
         }
 
         return instance;

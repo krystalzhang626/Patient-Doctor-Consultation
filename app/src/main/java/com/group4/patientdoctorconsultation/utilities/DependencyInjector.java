@@ -3,6 +3,7 @@ package com.group4.patientdoctorconsultation.utilities;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.storage.FirebaseStorage;
 import com.group4.patientdoctorconsultation.repository.DataPacketRepository;
 import com.group4.patientdoctorconsultation.repository.ProfileRepository;
 import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModelFactory;
@@ -22,6 +23,10 @@ public class DependencyInjector {
         return firestore;
     }
 
+    private static FirebaseStorage getFirebaseStorage(){
+        return FirebaseStorage.getInstance();
+    }
+
     private static FirebaseAuth getFirebaseAuth(){
         return FirebaseAuth.getInstance();
     }
@@ -31,7 +36,7 @@ public class DependencyInjector {
     }
 
     private static DataPacketRepository getDataPacketRepository(){
-        return DataPacketRepository.getInstance(getFirestore());
+        return DataPacketRepository.getInstance(getFirestore(), getFirebaseStorage());
     }
 
     public static ProfileViewModelFactory provideProfileViewModelFactory(){
