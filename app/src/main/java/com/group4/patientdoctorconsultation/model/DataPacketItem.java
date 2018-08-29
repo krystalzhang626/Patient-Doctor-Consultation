@@ -63,4 +63,8 @@ public class DataPacketItem implements Serializable {
     public void setValue(String value) {
         this.value = value;
     }
+
+    public String getImageUrl(){
+        return dataPacketItemType != DataPacketItemType.DOCUMENT_REFERENCE ? null : value;
+    }
 }

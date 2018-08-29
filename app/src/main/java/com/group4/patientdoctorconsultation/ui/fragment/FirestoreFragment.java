@@ -8,7 +8,7 @@ import com.group4.patientdoctorconsultation.common.FirestoreResource;
 
 public abstract class FirestoreFragment extends Fragment {
 
-    boolean handleFirestoreResult(FirestoreResource resource){
+    public boolean handleFirestoreResult(FirestoreResource resource){
         if(resource == null || (resource.getResource() == null && resource.getError() == null)){
             throw new IllegalStateException("Null result passed from Firestore Resource");
         }

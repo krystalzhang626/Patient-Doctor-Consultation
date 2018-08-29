@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.group4.patientdoctorconsultation.common.FirestoreResource;
 import com.group4.patientdoctorconsultation.common.LiveAdditionListener;
 import com.group4.patientdoctorconsultation.common.LiveCompleteListener;
+import com.group4.patientdoctorconsultation.common.LiveUploadListener;
 import com.group4.patientdoctorconsultation.model.DataPacket;
 import com.group4.patientdoctorconsultation.repository.DataPacketRepository;
 
@@ -71,7 +72,7 @@ public class DataPacketViewModel extends ViewModel implements FirebaseAuth.AuthS
         this.activePacketId.setValue(activePacketId);
     }
 
-    public void uploadAttachment(String fileName, InputStream inputStream){
-        dataPacketRepository.uploadAttachment(activePacketId.getValue(), fileName, inputStream);
+    public LiveUploadListener uploadAttachment(String fileName, InputStream inputStream){
+        return dataPacketRepository.uploadAttachment(activePacketId.getValue(), fileName, inputStream);
     }
 }
