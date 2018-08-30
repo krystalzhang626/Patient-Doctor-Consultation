@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.group4.patientdoctorconsultation.R;
 import com.group4.patientdoctorconsultation.common.FirestoreFragment;
 import com.group4.patientdoctorconsultation.common.PacketItemDialog;
+import com.group4.patientdoctorconsultation.common.SwipeDeleteAction;
 import com.group4.patientdoctorconsultation.data.adapter.PacketItemAdapter;
 import com.group4.patientdoctorconsultation.data.model.DataPacket;
 import com.group4.patientdoctorconsultation.data.model.DataPacketItem;
@@ -31,6 +33,7 @@ import com.group4.patientdoctorconsultation.utilities.DependencyInjector;
 import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModel;
 
 import java.util.List;
+import java.util.Objects;
 
 public class DataPacketFragment extends FirestoreFragment implements View.OnClickListener {
 
@@ -67,10 +70,6 @@ public class DataPacketFragment extends FirestoreFragment implements View.OnClic
     @SuppressLint("CommitTransaction")
     @Override
     public void onClick(View view) {
-        if(getFragmentManager() == null){
-            throw new NullPointerException();
-        }
-
         PacketItemDialog itemDialog;
 
         switch (view.getId()){
@@ -92,7 +91,7 @@ public class DataPacketFragment extends FirestoreFragment implements View.OnClic
         }
 
         itemDialog.setTargetFragment(this, RC_TITLE);
-        itemDialog.show(getFragmentManager().beginTransaction(), TAG);
+        itemDialog.show(Objects.requireNonNull(getFragmentManager()).beginTransaction(), TAG);
     }
 
     @Override
@@ -101,11 +100,9 @@ public class DataPacketFragment extends FirestoreFragment implements View.OnClic
 
         if (requestCode == RC_TITLE && resultCode == Activity.RESULT_OK) {
             try {
-                DataPacketItem result = (DataPacketItem) data.getSerializableExtra(TextDialogFragment.EXTRA_RESULT);
-
-                if (result == null) {
-                    throw new NullPointerException();
-                }
+                DataPacketItem result = Objects.requireNonNull(
+                        (DataPacketItem) data.getSerializableExtra(TextDialogFragment.EXTRA_RESULT)
+                );
 
                 DataPacket dataPacket = binding.getDataPacket();
                 List<DataPacketItem> dataPacketItems = packetItemAdapter.getListItems();
@@ -124,6 +121,17 @@ public class DataPacketFragment extends FirestoreFragment implements View.OnClic
         packetItemAdapter = new PacketItemAdapter(packetItem -> {});
         packetItemList.setLayoutManager(new LinearLayoutManager(requireContext()));
         packetItemList.setAdapter(packetItemAdapter);
+
+        SwipeDeleteAction swipeDeleteAction = new SwipeDeleteAction(requireContext()) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                packetItemAdapter.removeAt(viewHolder.getAdapterPosition());
+                updateDataPacket(binding.getDataPacket(), packetItemAdapter.getListItems());
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeDeleteAction);
+        itemTouchHelper.attachToRecyclerView(packetItemList);
     }
 
     private void updatePacketBinding(DataPacket newPacket) {

@@ -21,6 +21,8 @@ import com.group4.patientdoctorconsultation.ui.dialogfragment.TextDialogFragment
 import com.group4.patientdoctorconsultation.utilities.DependencyInjector;
 import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModel;
 
+import java.util.Objects;
+
 import androidx.navigation.Navigation;
 
 public class HomeFragment extends FirestoreFragment
@@ -63,12 +65,9 @@ public class HomeFragment extends FirestoreFragment
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.new_packet_card) {
-            if(getFragmentManager() == null){
-                throw new NullPointerException();
-            }
             TextDialogFragment textDialogFragment = new TextDialogFragment();
             textDialogFragment.setTargetFragment(this, RC_TITLE);
-            textDialogFragment.show(getFragmentManager().beginTransaction(), TAG);
+            textDialogFragment.show(Objects.requireNonNull(getFragmentManager()).beginTransaction(), TAG);
         }
     }
 
@@ -78,11 +77,9 @@ public class HomeFragment extends FirestoreFragment
 
         if (requestCode == RC_TITLE && resultCode == Activity.RESULT_OK) {
             try {
-                DataPacketItem result = (DataPacketItem) data.getSerializableExtra(TextDialogFragment.EXTRA_RESULT);
-                if (result == null) {
-                    throw new NullPointerException();
-                }
-
+                DataPacketItem result = Objects.requireNonNull(
+                        (DataPacketItem) data.getSerializableExtra(TextDialogFragment.EXTRA_RESULT)
+                );
                 viewModel
                     .addDataPacket(result.getValue())
                     .observe(HomeFragment.this, additionResult -> {

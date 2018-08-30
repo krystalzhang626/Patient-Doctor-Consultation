@@ -21,7 +21,7 @@ public class DataPacketItem implements Serializable {
     public DataPacketItem(DataPacketItemType dataPacketItemType, String value) {
         this.dataPacketItemType = dataPacketItemType;
         this.value = value;
-        this.displayValue = value;
+        this.displayValue = dataPacketItemType == DataPacketItemType.DOCUMENT_REFERENCE ? null : value;
         setIconResourceId();
     }
 
