@@ -2,7 +2,6 @@ package com.group4.patientdoctorconsultation.ui.dialogfragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.DocumentsContract;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,18 +17,16 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.group4.patientdoctorconsultation.R;
+import com.group4.patientdoctorconsultation.common.FirestoreFragment;
+import com.group4.patientdoctorconsultation.common.GlideApp;
 import com.group4.patientdoctorconsultation.common.PacketItemDialog;
-import com.group4.patientdoctorconsultation.model.DataPacketItem;
-import com.group4.patientdoctorconsultation.ui.fragment.FirestoreFragment;
+import com.group4.patientdoctorconsultation.data.model.DataPacketItem;
 import com.group4.patientdoctorconsultation.utilities.DependencyInjector;
-import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModel;
-import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModelFactory;
 
 import java.io.IOException;
 
@@ -41,11 +39,11 @@ public class AttachmentDialogFragment extends PacketItemDialog {
 
     TextView fileName;
     String firestoreUri;
-    ProgressBar progressBar;
     ImageView imageView;
+    ProgressBar loadingIcon;
 
     @Override
-    public String getDialogResult(){
+    public String getDialogResult() {
         return firestoreUri == null ? "" : firestoreUri;
     }
 
@@ -60,15 +58,20 @@ public class AttachmentDialogFragment extends PacketItemDialog {
         View view = inflater.inflate(R.layout.fragment_dialog_attachment, null);
 
         fileName = view.findViewById(R.id.filename);
-        progressBar = view.findViewById(R.id.progress_bar);
         imageView = view.findViewById(R.id.image_preview);
+        loadingIcon = view.findViewById(R.id.loading_icon);
 
         openFile();
 
         return view;
     }
 
-    private void openFile(){
+    @Override
+    protected boolean saveEnabledByDefault() {
+        return false;
+    }
+
+    private void openFile() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
@@ -81,13 +84,14 @@ public class AttachmentDialogFragment extends PacketItemDialog {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_OPEN_FILE && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
-            try{
+            try {
                 ContentResolver contentResolver = requireContext().getContentResolver();
                 Uri fileUri = data.getData();
 
-                uploadAttachment(contentResolver, fileUri);
                 fileName.setText(getFileName(contentResolver, fileUri));
-            } catch (Exception e){
+                uploadAttachment(contentResolver, fileUri);
+
+            } catch (Exception e) {
                 Log.w(TAG, e.getMessage());
             }
         }
@@ -95,42 +99,43 @@ public class AttachmentDialogFragment extends PacketItemDialog {
 
     private void uploadAttachment(ContentResolver contentResolver, Uri fileUri) throws IOException {
 
-        if(!(getTargetFragment() instanceof FirestoreFragment)){
+        if (!(getTargetFragment() instanceof FirestoreFragment)) {
             throw new IllegalStateException("Host fragment must extend FireStoreFragment");
         }
 
-        progressBar.setVisibility(View.VISIBLE);
-
-        getViewModel().uploadAttachment(
-                "filename",
+        DependencyInjector.provideDataPacketViewModel(requireActivity()).uploadAttachment(
+                fileName.getText().toString(),
                 contentResolver.openInputStream(fileUri)
         ).observe(this, uriFirestoreResource -> {
-            if(uriFirestoreResource != null &&
-                    ((FirestoreFragment)getTargetFragment()).handleFirestoreResult(uriFirestoreResource)){
+            if (uriFirestoreResource != null &&
+                    ((FirestoreFragment) getTargetFragment()).handleFirestoreResult(uriFirestoreResource)) {
                 firestoreUri = uriFirestoreResource.getResource().toString();
 
-                Glide.with(requireContext())
-                    .load(uriFirestoreResource.getResource())
+                GlideApp.with(requireContext())
+                        .load(uriFirestoreResource.getResource())
                         .listener(new RequestListener<Drawable>() {
                             @Override
                             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                progressBar.setVisibility(View.GONE);
+                                getAlertDialog().getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                                loadingIcon.setVisibility(View.INVISIBLE);
                                 return false;
                             }
 
                             @Override
                             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                progressBar.setVisibility(View.GONE);
+                                getAlertDialog().getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                                loadingIcon.setVisibility(View.INVISIBLE);
                                 return false;
                             }
                         })
-                    .into(imageView);
+                        .into(imageView);
 
             }
         });
+
     }
 
-    private String getFileName(ContentResolver contentResolver, Uri uri){
+    private String getFileName(ContentResolver contentResolver, Uri uri) {
 
         try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
             if (cursor != null) {
@@ -141,14 +146,6 @@ public class AttachmentDialogFragment extends PacketItemDialog {
         }
 
         throw new NullPointerException("Could not determine file name");
-    }
-
-    private DataPacketViewModel getViewModel() {
-        DataPacketViewModelFactory dataPacketViewModelFactory = DependencyInjector.provideDataPacketViewModelFactory();
-
-        return ViewModelProviders
-                .of(requireActivity(), dataPacketViewModelFactory)
-                .get(DataPacketViewModel.class);
     }
 
 }

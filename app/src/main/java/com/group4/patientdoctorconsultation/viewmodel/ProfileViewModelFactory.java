@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.group4.patientdoctorconsultation.repository.ProfileRepository;
+import com.group4.patientdoctorconsultation.data.repository.ProfileRepository;
 
 public class ProfileViewModelFactory implements ViewModelProvider.Factory {
 

@@ -1,17 +1,12 @@
-package com.group4.patientdoctorconsultation.ui.fragment;
+package com.group4.patientdoctorconsultation.common;
 
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.group4.patientdoctorconsultation.common.FirestoreResource;
-
 public abstract class FirestoreFragment extends Fragment {
 
-    public boolean handleFirestoreResult(FirestoreResource resource){
-        if(resource == null || (resource.getResource() == null && resource.getError() == null)){
-            throw new IllegalStateException("Null result passed from Firestore Resource");
-        }
+    public boolean handleFirestoreResult(FailableResource resource){
 
         if(resource.isSuccessful() && resource.getResource() != null){
             return true;

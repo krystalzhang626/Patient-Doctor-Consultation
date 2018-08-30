@@ -1,24 +1,24 @@
 package com.group4.patientdoctorconsultation.common;
 
-public class FirestoreResource<T> {
+public class FailableResource<T> {
 
     private final T resource;
     private final Exception error;
 
-    FirestoreResource(T resource) {
+    FailableResource(T resource) {
         this(resource, null);
     }
 
-    FirestoreResource(Exception error) {
+    FailableResource(Exception error) {
         this(null, error);
     }
 
-    private FirestoreResource(T resource, Exception error) {
+    private FailableResource(T resource, Exception error) {
         this.resource = resource;
         this.error = error;
     }
 
-    public boolean isSuccessful(){
+    boolean isSuccessful(){
         return resource != null && error == null;
     }
 
@@ -30,7 +30,7 @@ public class FirestoreResource<T> {
         return resource;
     }
 
-    public Exception getError(){
+    Exception getError(){
         if(resource != null){
             throw new IllegalStateException("Resource include data, call isSuccessful()");
         }

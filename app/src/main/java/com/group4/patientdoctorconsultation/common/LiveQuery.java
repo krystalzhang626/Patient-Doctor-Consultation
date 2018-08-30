@@ -15,7 +15,7 @@ import java.util.List;
 
 
 public final class LiveQuery<T extends IndexedFirestoreResource>
-        extends LiveData<FirestoreResource<List<T>>> implements EventListener<QuerySnapshot> {
+        extends LiveData<FailableResource<List<T>>> implements EventListener<QuerySnapshot> {
 
     private final Query query;
     private final Class<T> type;
@@ -29,10 +29,10 @@ public final class LiveQuery<T extends IndexedFirestoreResource>
     @Override
     public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException exception) {
         if (exception != null) {
-            setValue(new FirestoreResource<>(exception));
+            setValue(new FailableResource<>(exception));
             return;
         }
-        setValue(new FirestoreResource<>(documentToList(snapshots)));
+        setValue(new FailableResource<>(documentToList(snapshots)));
     }
 
     @Override

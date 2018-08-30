@@ -6,17 +6,17 @@ import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.group4.patientdoctorconsultation.common.FirestoreResource;
-import com.group4.patientdoctorconsultation.common.LiveCompleteListener;
-import com.group4.patientdoctorconsultation.model.Profile;
-import com.group4.patientdoctorconsultation.repository.ProfileRepository;
+import com.group4.patientdoctorconsultation.common.FailableResource;
+import com.group4.patientdoctorconsultation.common.LiveResultListener;
+import com.group4.patientdoctorconsultation.data.model.Profile;
+import com.group4.patientdoctorconsultation.data.repository.ProfileRepository;
 
 public class ProfileViewModel extends ViewModel implements FirebaseAuth.AuthStateListener {
 
     private final ProfileRepository profileRepository;
     private final MutableLiveData<Boolean> isSignedIn;
 
-    private LiveData<FirestoreResource<Profile>> profile;
+    private LiveData<FailableResource<Profile>> profile;
 
     ProfileViewModel(ProfileRepository profileRepository, FirebaseAuth firebaseAuth) {
         this.profileRepository = profileRepository;
@@ -46,7 +46,7 @@ public class ProfileViewModel extends ViewModel implements FirebaseAuth.AuthStat
         }
     }
 
-    public LiveCompleteListener updateProfile(Profile profile) {
+    public LiveResultListener<Boolean> updateProfile(Profile profile) {
         return profileRepository.updateProfile(profile);
     }
 
@@ -54,7 +54,7 @@ public class ProfileViewModel extends ViewModel implements FirebaseAuth.AuthStat
         return isSignedIn;
     }
 
-    public LiveData<FirestoreResource<Profile>> getProfile() {
+    public LiveData<FailableResource<Profile>> getProfile() {
         return profile;
     }
 }

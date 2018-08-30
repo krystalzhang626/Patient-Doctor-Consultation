@@ -1,4 +1,4 @@
-package com.group4.patientdoctorconsultation.model;
+package com.group4.patientdoctorconsultation.data.model;
 
 import com.group4.patientdoctorconsultation.R;
 
@@ -16,10 +16,12 @@ public class DataPacketItem implements Serializable {
     private DataPacketItemType dataPacketItemType;
     private int iconResourceId;
     private String value;
+    private String displayValue;
 
     public DataPacketItem(DataPacketItemType dataPacketItemType, String value) {
         this.dataPacketItemType = dataPacketItemType;
         this.value = value;
+        this.displayValue = value;
         setIconResourceId();
     }
 
@@ -65,6 +67,14 @@ public class DataPacketItem implements Serializable {
     }
 
     public String getImageUrl(){
-        return dataPacketItemType != DataPacketItemType.DOCUMENT_REFERENCE ? null : value;
+        return dataPacketItemType == DataPacketItemType.DOCUMENT_REFERENCE ? value : null;
+    }
+
+    public String getDisplayValue() {
+        return displayValue;
+    }
+
+    public void setDisplayValue(String displayValue) {
+        this.displayValue = displayValue;
     }
 }

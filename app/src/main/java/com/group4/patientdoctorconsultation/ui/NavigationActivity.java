@@ -1,7 +1,6 @@
 package com.group4.patientdoctorconsultation.ui;
 
 import android.app.Activity;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +11,6 @@ import com.firebase.ui.auth.AuthUI;
 import com.group4.patientdoctorconsultation.R;
 import com.group4.patientdoctorconsultation.utilities.DependencyInjector;
 import com.group4.patientdoctorconsultation.viewmodel.ProfileViewModel;
-import com.group4.patientdoctorconsultation.viewmodel.ProfileViewModelFactory;
 
 import java.util.Collections;
 
@@ -55,7 +53,7 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     private void initialiseViewModel(){
-        ProfileViewModel viewModel = getViewModel();
+        ProfileViewModel viewModel = DependencyInjector.provideProfileViewModel(this);
         viewModel.getIsSignedIn().observe(this, isSignedIn -> {
             if(isSignedIn != null && !isSignedIn){
                 startSignIn();
@@ -72,13 +70,5 @@ public class NavigationActivity extends AppCompatActivity {
                 .build();
 
         startActivityForResult(intent, RC_SIGN_IN);
-    }
-
-    private ProfileViewModel getViewModel() {
-        ProfileViewModelFactory profileViewModelFactory = DependencyInjector.provideProfileViewModelFactory();
-
-        return ViewModelProviders
-                .of(this, profileViewModelFactory)
-                .get(ProfileViewModel.class);
     }
 }

@@ -9,7 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 
 public class LiveDocument<T extends IndexedFirestoreResource>
-        extends LiveData<FirestoreResource<T>> implements EventListener<DocumentSnapshot> {
+        extends LiveData<FailableResource<T>> implements EventListener<DocumentSnapshot> {
 
     private ListenerRegistration listenerRegistration;
     private final DocumentReference documentReference;
@@ -23,14 +23,14 @@ public class LiveDocument<T extends IndexedFirestoreResource>
     @Override
     public void onEvent(DocumentSnapshot snapshot, FirebaseFirestoreException exception) {
         if (exception != null) {
-            setValue(new FirestoreResource<>(exception));
+            setValue(new FailableResource<>(exception));
             return;
         }
 
         T object = snapshot.toObject(objectType);
         if (object != null){
             object.setId(snapshot.getId());
-            setValue(new FirestoreResource<>(object));
+            setValue(new FailableResource<>(object));
         }
     }
 

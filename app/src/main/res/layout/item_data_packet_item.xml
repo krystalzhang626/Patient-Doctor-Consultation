@@ -5,9 +5,11 @@
 
     <data>
 
+        <import type="android.view.View"/>
+
         <variable
             name="dataPacketItem"
-            type="com.group4.patientdoctorconsultation.model.DataPacketItem" />
+            type="com.group4.patientdoctorconsultation.data.model.DataPacketItem" />
 
     </data>
 
@@ -27,6 +29,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
                 android:src="@{dataPacketItem.iconResourceId}"
                 tools:src="@drawable/ic_favorite_black_24dp" />
 
@@ -38,11 +41,11 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="@{dataPacketItem.imageUrl}"
+                    android:text="@{dataPacketItem.displayValue}"
+                    android:visibility="@{dataPacketItem.displayValue == null ? View.GONE : View.VISIBLE}"
                     tools:text="Packet Title" />
 
                 <ImageView

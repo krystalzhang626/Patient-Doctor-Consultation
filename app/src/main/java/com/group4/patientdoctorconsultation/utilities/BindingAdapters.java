@@ -1,10 +1,11 @@
 package com.group4.patientdoctorconsultation.utilities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+import com.group4.patientdoctorconsultation.common.GlideApp;
 
 public class BindingAdapters {
 
@@ -13,10 +14,14 @@ public class BindingAdapters {
         imageView.setImageResource(resource);
     }
 
+    @SuppressLint("CheckResult")
     @BindingAdapter("imageUrl")
     public static void setImageUrl(ImageView imageView, String url) {
         Context context = imageView.getContext();
-        Glide.with(context).load(url).into(imageView);
+
+        GlideApp.with(context)
+                .load(url)
+                .into(imageView);
     }
 
 }

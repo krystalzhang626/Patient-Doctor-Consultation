@@ -7,7 +7,7 @@ import android.widget.EditText;
 
 import com.group4.patientdoctorconsultation.R;
 import com.group4.patientdoctorconsultation.common.PacketItemDialog;
-import com.group4.patientdoctorconsultation.model.DataPacketItem;
+import com.group4.patientdoctorconsultation.data.model.DataPacketItem;
 
 public class LocationDialogFragment extends PacketItemDialog {
 

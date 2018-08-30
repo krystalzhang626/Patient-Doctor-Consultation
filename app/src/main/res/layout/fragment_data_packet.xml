@@ -7,7 +7,7 @@
 
         <variable
             name="dataPacket"
-            type="com.group4.patientdoctorconsultation.model.DataPacket" />
+            type="com.group4.patientdoctorconsultation.data.model.DataPacket" />
     </data>
 
     <RelativeLayout

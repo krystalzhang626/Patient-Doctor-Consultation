@@ -31,6 +31,9 @@ buildscript {
 
         //FAB
         FABVersion = '1.10.1'
+
+        //Glide
+        glideVersion = '4.8.0'
     }
 
     repositories {
