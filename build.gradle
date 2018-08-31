@@ -34,6 +34,9 @@ buildscript {
 
         //Glide
         glideVersion = '4.8.0'
+
+        //Maps
+        mapVersion = '15.0.1'
     }
 
     repositories {

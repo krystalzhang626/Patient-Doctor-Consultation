@@ -63,6 +63,9 @@ dependencies {
     //Glide
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
+
+    //Maps
+    implementation "com.google.android.gms:play-services-places:$rootProject.mapVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'
