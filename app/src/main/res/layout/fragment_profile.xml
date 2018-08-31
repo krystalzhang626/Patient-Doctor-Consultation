@@ -12,7 +12,7 @@
 
         <variable
             name="profile"
-            type="com.group4.patientdoctorconsultation.model.Profile" />
+            type="com.group4.patientdoctorconsultation.data.model.Profile" />
 
     </data>
 

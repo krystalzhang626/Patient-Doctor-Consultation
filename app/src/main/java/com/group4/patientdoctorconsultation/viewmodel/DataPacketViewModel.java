@@ -4,15 +4,18 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.group4.patientdoctorconsultation.common.FirestoreResource;
-import com.group4.patientdoctorconsultation.common.LiveAdditionListener;
-import com.group4.patientdoctorconsultation.common.LiveCompleteListener;
-import com.group4.patientdoctorconsultation.model.DataPacket;
-import com.group4.patientdoctorconsultation.repository.DataPacketRepository;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.storage.StorageMetadata;
+import com.group4.patientdoctorconsultation.common.FailableResource;
+import com.group4.patientdoctorconsultation.common.LiveResultListener;
+import com.group4.patientdoctorconsultation.data.model.DataPacket;
+import com.group4.patientdoctorconsultation.data.repository.DataPacketRepository;
 
+import java.io.InputStream;
 import java.util.List;
 
 public class DataPacketViewModel extends ViewModel implements FirebaseAuth.AuthStateListener {
@@ -22,9 +25,9 @@ public class DataPacketViewModel extends ViewModel implements FirebaseAuth.AuthS
     private final FirebaseAuth firebaseAuth;
     private final MutableLiveData<String> profileId = new MutableLiveData<>();
 
-    private final LiveData<FirestoreResource<List<DataPacket>>> dataPackets;
+    private final LiveData<FailableResource<List<DataPacket>>> dataPackets;
     private final MutableLiveData<String> activePacketId;
-    private final LiveData<FirestoreResource<DataPacket>> activePacket;
+    private final LiveData<FailableResource<DataPacket>> activePacket;
 
 
     DataPacketViewModel(DataPacketRepository dataPacketRepository, FirebaseAuth firebaseAuth) {
@@ -50,23 +53,31 @@ public class DataPacketViewModel extends ViewModel implements FirebaseAuth.AuthS
         super.onCleared();
     }
 
-    public LiveCompleteListener updateDataPacket(DataPacket dataPacket){
+    public LiveResultListener<Boolean> updateDataPacket(DataPacket dataPacket){
         return dataPacketRepository.updateDataPacket(dataPacket);
     }
 
-    public LiveData<FirestoreResource<List<DataPacket>>> getDataPackets(){
+    public LiveData<FailableResource<List<DataPacket>>> getDataPackets(){
         return dataPackets;
     }
 
-    public LiveData<FirestoreResource<DataPacket>> getActivePacket() {
+    public LiveData<FailableResource<DataPacket>> getActivePacket() {
         return activePacket;
     }
 
-    public LiveAdditionListener addDataPacket(String title){
+    public LiveResultListener<DocumentReference> addDataPacket(String title){
         return dataPacketRepository.addDataPacket(profileId.getValue(), title);
     }
 
     public void setActivePacketId(String activePacketId){
         this.activePacketId.setValue(activePacketId);
+    }
+
+    public LiveResultListener<Uri> uploadAttachment(String fileName, InputStream inputStream){
+        return dataPacketRepository.uploadAttachment(activePacketId.getValue(), fileName, inputStream);
+    }
+
+    public LiveResultListener<StorageMetadata> getFileMetaData(String fileReference){
+        return dataPacketRepository.getFileMetadata(fileReference);
     }
 }

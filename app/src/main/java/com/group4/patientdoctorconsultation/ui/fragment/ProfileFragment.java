@@ -1,6 +1,5 @@
 package com.group4.patientdoctorconsultation.ui.fragment;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.group4.patientdoctorconsultation.R;
+import com.group4.patientdoctorconsultation.common.FirestoreFragment;
 import com.group4.patientdoctorconsultation.databinding.FragmentProfileBinding;
 import com.group4.patientdoctorconsultation.utilities.DependencyInjector;
 import com.group4.patientdoctorconsultation.viewmodel.ProfileViewModel;
-import com.group4.patientdoctorconsultation.viewmodel.ProfileViewModelFactory;
 
 public class ProfileFragment extends FirestoreFragment {
 
@@ -31,7 +30,7 @@ public class ProfileFragment extends FirestoreFragment {
     }
 
     private void observeProfile(){
-        viewModel = getViewModel();
+        viewModel = DependencyInjector.provideProfileViewModel(requireActivity());
         viewModel.getProfile().observe(this, profile -> {
             if(profile != null && handleFirestoreResult(profile)){
                 binding.setProfile(profile.getResource());
@@ -41,17 +40,9 @@ public class ProfileFragment extends FirestoreFragment {
 
     public void submit(View view){ //Do not remove parameter, required for data binding
         viewModel.updateProfile(binding.getProfile()).observe(this, isComplete -> {
-            if(handleFirestoreResult(isComplete)){
+            if(isComplete != null && handleFirestoreResult(isComplete) && isComplete.getResource()){
                 Toast.makeText(requireContext(), "Saved",Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    private ProfileViewModel getViewModel() {
-        ProfileViewModelFactory profileViewModelFactory = DependencyInjector.provideProfileViewModelFactory();
-
-        return ViewModelProviders
-                .of(requireActivity(), profileViewModelFactory)
-                .get(ProfileViewModel.class);
     }
 }

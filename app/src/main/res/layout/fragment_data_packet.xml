@@ -7,12 +7,32 @@
 
         <variable
             name="dataPacket"
-            type="com.group4.patientdoctorconsultation.model.DataPacket" />
+            type="com.group4.patientdoctorconsultation.data.model.DataPacket" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Title"
+                android:text="@{dataPacket.title}"
+                tools:text="Packet Title" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/packet_item_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                tools:itemCount="5"
+                tools:listitem="@layout/item_data_packet_item" />
+
+        </LinearLayout>
 
         <com.getbase.floatingactionbutton.FloatingActionsMenu
             android:layout_width="wrap_content"
@@ -61,26 +81,6 @@
                 fab:fab_title="Action A" />
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/Title"
-                android:text="@{dataPacket.title}"
-                tools:text="Packet Title" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/packet_item_list"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                tools:itemCount="5"
-                tools:listitem="@layout/item_data_packet_item" />
-
-        </LinearLayout>
 
     </RelativeLayout>
 

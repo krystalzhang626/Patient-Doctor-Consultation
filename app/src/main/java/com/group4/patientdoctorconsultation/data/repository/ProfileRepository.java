@@ -1,10 +1,10 @@
-package com.group4.patientdoctorconsultation.repository;
+package com.group4.patientdoctorconsultation.data.repository;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.group4.patientdoctorconsultation.common.LiveCompleteListener;
 import com.group4.patientdoctorconsultation.common.LiveDocument;
-import com.group4.patientdoctorconsultation.model.Profile;
+import com.group4.patientdoctorconsultation.common.LiveResultListener;
+import com.group4.patientdoctorconsultation.data.model.Profile;
 
 public class ProfileRepository {
 
@@ -22,9 +22,12 @@ public class ProfileRepository {
         );
     }
 
-    public LiveCompleteListener updateProfile(Profile profile){
-        LiveCompleteListener liveCompleteListener = new LiveCompleteListener();
-        profileCollection.document(profile.getId()).set(profile).addOnCompleteListener(liveCompleteListener);
+    public LiveResultListener<Boolean> updateProfile(Profile profile){
+        LiveResultListener<Boolean> liveCompleteListener = new LiveResultListener<>();
+        profileCollection.document(profile.getId())
+                .set(profile)
+                .addOnSuccessListener(runnable -> liveCompleteListener.onSuccess(true))
+                .addOnFailureListener(liveCompleteListener);
         return liveCompleteListener;
     }
 

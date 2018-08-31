@@ -1,4 +1,4 @@
-package com.group4.patientdoctorconsultation.adapter;
+package com.group4.patientdoctorconsultation.data.adapter;
 
 import android.databinding.DataBindingUtil;
 import android.view.LayoutInflater;
@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import com.group4.patientdoctorconsultation.R;
 import com.group4.patientdoctorconsultation.common.BindingAdapter;
 import com.group4.patientdoctorconsultation.common.ClickListener;
+import com.group4.patientdoctorconsultation.data.model.DataPacket;
 import com.group4.patientdoctorconsultation.databinding.ItemDataPacketBinding;
-import com.group4.patientdoctorconsultation.model.DataPacket;
 
 public class PacketAdapter extends BindingAdapter<DataPacket, ItemDataPacketBinding> {
 
