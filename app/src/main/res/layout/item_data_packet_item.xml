@@ -46,7 +46,8 @@
                     android:gravity="center"
                     android:text="@{dataPacketItem.displayValue}"
                     android:visibility="@{dataPacketItem.displayValue == null ? View.GONE : View.VISIBLE}"
-                    tools:text="Packet Title" />
+                    tools:text="Packet Title"
+                    android:autoLink="web"/>
 
                 <ImageView
                     android:id="@+id/image_preview"
