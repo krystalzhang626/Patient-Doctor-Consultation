@@ -14,6 +14,8 @@ public class DataPacket extends IndexedFirestoreResource {
     public static final String FIELD_COMMENTS = "comments";
     public static final String FIELD_TITLE = "title";
     public static final String FIELD_HEART_RATE = "heartRate";
+    public static final String FIELD_LOCATIONS = "locations";
+
 
     private String doctorId;
     private String patientId;
@@ -21,6 +23,7 @@ public class DataPacket extends IndexedFirestoreResource {
     private List<String> documentReferences;
     private List<String> notes;
     private List<String> comments;
+    private List<String> locations;
     private String heartRate;
 
     public String getDoctorId() {
@@ -69,6 +72,14 @@ public class DataPacket extends IndexedFirestoreResource {
 
     public void setComments(List<String> comments) {
         this.comments = comments;
+    }
+
+    public List<String> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<String> locations) {
+        this.locations = locations;
     }
 
     public String getHeartRate() {

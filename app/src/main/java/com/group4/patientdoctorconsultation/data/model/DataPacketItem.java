@@ -5,6 +5,7 @@ import com.group4.patientdoctorconsultation.R;
 import java.io.Serializable;
 
 public class DataPacketItem implements Serializable {
+
     public enum DataPacketItemType{
         HEART_RATE,
         DOCUMENT_REFERENCE,

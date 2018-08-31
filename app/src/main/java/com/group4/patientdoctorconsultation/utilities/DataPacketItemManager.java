@@ -16,6 +16,7 @@ public class DataPacketItemManager {
         List<String> documentReferences = new ArrayList<>();
         List<String> comments = new ArrayList<>();
         List<String> notes = new ArrayList<>();
+        List<String> locations = new ArrayList<>();
 
         for (DataPacketItem dataPacketItem : packetItems) {
             switch (dataPacketItem.getDataPacketItemType()) {
@@ -24,6 +25,9 @@ public class DataPacketItemManager {
                     break;
                 case DOCUMENT_REFERENCE:
                     documentReferences.add(dataPacketItem.getValue());
+                    break;
+                case LOCATION:
+                    locations.add(dataPacketItem.getValue());
                     break;
                 case COMMENT:
                     comments.add(dataPacketItem.getValue());
@@ -37,6 +41,7 @@ public class DataPacketItemManager {
         dataPacket.setDocumentReferences(documentReferences);
         dataPacket.setComments(comments);
         dataPacket.setNotes(notes);
+        dataPacket.setLocations(locations);
 
         return dataPacket;
     }
@@ -63,6 +68,12 @@ public class DataPacketItemManager {
         if (newPacket.getNotes() != null) {
             for (String note : newPacket.getNotes()) {
                 dataPacketItems.add(new DataPacketItem(DataPacketItem.DataPacketItemType.NOTE, note));
+            }
+        }
+
+        if (newPacket.getLocations() != null) {
+            for (String location : newPacket.getLocations()) {
+                dataPacketItems.add(new DataPacketItem(DataPacketItem.DataPacketItemType.LOCATION, location));
             }
         }
 
