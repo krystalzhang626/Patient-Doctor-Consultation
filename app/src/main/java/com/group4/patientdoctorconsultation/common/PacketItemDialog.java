@@ -26,12 +26,15 @@ public abstract class PacketItemDialog extends DialogFragment {
         }
 
         alertDialog = new AlertDialog.Builder(requireActivity())
-                .setTitle(getPacketItemType().toString())
+                .setTitle(getTitle())
                 .setView(getView(getTargetFragment().getLayoutInflater()))
-                .setNegativeButton("CANCEL", (dialog, which) -> dialog.cancel())
+                .setNegativeButton("CANCEL", (dialog, which) -> {
+                    dialog.cancel();
+                    (getTargetFragment()).onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, null);
+                })
                 .setPositiveButton("SAVE", (dialogInterface, i) -> {
                     Intent result = new Intent();
-                    result.putExtra(EXTRA_RESULT, new DataPacketItem(getPacketItemType(), getDialogResult()));
+                    result.putExtra(EXTRA_RESULT, new DataPacketItem(getPacketItemType(), getDialogResult(), getDialogDisplayResult()));
                     (getTargetFragment()).onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, result);
                 })
                 .create();
@@ -54,6 +57,14 @@ public abstract class PacketItemDialog extends DialogFragment {
 
     protected boolean cancelEnabledByDefault() {
         return true;
+    }
+
+    protected String getDialogDisplayResult(){
+        return getDialogResult();
+    }
+
+    protected String getTitle(){
+        return getPacketItemType().toString();
     }
 
     abstract public String getDialogResult();

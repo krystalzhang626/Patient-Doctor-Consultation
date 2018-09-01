@@ -3,6 +3,7 @@ package com.group4.patientdoctorconsultation.data.repository;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.group4.patientdoctorconsultation.common.LiveDocument;
+import com.group4.patientdoctorconsultation.common.LiveQuery;
 import com.group4.patientdoctorconsultation.common.LiveResultListener;
 import com.group4.patientdoctorconsultation.data.model.Profile;
 
@@ -29,6 +30,13 @@ public class ProfileRepository {
                 .addOnSuccessListener(runnable -> liveCompleteListener.onSuccess(true))
                 .addOnFailureListener(liveCompleteListener);
         return liveCompleteListener;
+    }
+
+    public LiveQuery<Profile> getLinkedProfiles(String profileId){
+        return new LiveQuery<>(
+                profileCollection.whereEqualTo(Profile.FIELD_LINKED_PROFILES + "." + profileId, true),
+                Profile.class
+        );
     }
 
     public static synchronized ProfileRepository getInstance(FirebaseFirestore firestore){

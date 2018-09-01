@@ -15,10 +15,4 @@
         android:title="@string/menu_title_profile"
         android:icon="@drawable/ic_account_box_black_24dp"/>
 
-    <item
-        android:id="@+id/fragment_preferences"
-        android:enabled="true"
-        android:title="@string/menu_title_preferences"
-        android:icon="@drawable/ic_settings_black_24dp"/>
-
 </menu>
