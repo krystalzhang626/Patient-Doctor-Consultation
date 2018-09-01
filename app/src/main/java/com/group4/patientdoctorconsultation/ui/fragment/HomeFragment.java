@@ -16,10 +16,12 @@ import android.view.ViewGroup;
 import com.group4.patientdoctorconsultation.R;
 import com.group4.patientdoctorconsultation.common.FirestoreFragment;
 import com.group4.patientdoctorconsultation.data.adapter.PacketAdapter;
+import com.group4.patientdoctorconsultation.data.adapter.ProfileAdapter;
 import com.group4.patientdoctorconsultation.data.model.DataPacketItem;
 import com.group4.patientdoctorconsultation.ui.dialogfragment.TextDialogFragment;
 import com.group4.patientdoctorconsultation.utilities.DependencyInjector;
 import com.group4.patientdoctorconsultation.viewmodel.DataPacketViewModel;
+import com.group4.patientdoctorconsultation.viewmodel.ProfileViewModel;
 
 import java.util.Objects;
 
@@ -31,21 +33,32 @@ public class HomeFragment extends FirestoreFragment
     private static final int RC_TITLE = 1;
     private static final String TAG = HomeFragment.class.getSimpleName();
 
-    private DataPacketViewModel viewModel;
+    private DataPacketViewModel dataPacketViewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        viewModel = DependencyInjector.provideDataPacketViewModel(requireActivity());
+        dataPacketViewModel = DependencyInjector.provideDataPacketViewModel(requireActivity());
+        ProfileViewModel profileViewModel = DependencyInjector.provideProfileViewModel(requireActivity());
+
+        ProfileAdapter profileAdapter = new ProfileAdapter(item -> {});
+        RecyclerView profileList = view.findViewById(R.id.profile_list);
+        profileList.setLayoutManager(new LinearLayoutManager(requireContext()));
+        profileList.setAdapter(profileAdapter);
+        profileViewModel.getLinkedProfiles().observe(this, profiles -> {
+            if(profiles != null && handleFirestoreResult(profiles)){
+                profileAdapter.replaceListItems(profiles.getResource());
+            }
+        });
 
         PacketAdapter packetAdapter = new PacketAdapter(packet -> openDataPacket(view, packet.getId()));
         RecyclerView packetList = view.findViewById(R.id.data_packet_list);
         packetList.setLayoutManager(new LinearLayoutManager(requireContext()));
         packetList.setAdapter(packetAdapter);
 
-        viewModel.getDataPackets().observe(this, dataPackets -> {
+        dataPacketViewModel.getDataPackets().observe(this, dataPackets -> {
             if (dataPackets != null && handleFirestoreResult(dataPackets)) {
                 packetAdapter.replaceListItems(dataPackets.getResource());
             }
@@ -57,7 +70,7 @@ public class HomeFragment extends FirestoreFragment
     }
 
     private void openDataPacket(View view, String packetId) {
-        viewModel.setActivePacketId(packetId);
+        dataPacketViewModel.setActivePacketId(packetId);
         Navigation.findNavController(view).navigate(R.id.action_home_to_data_packet);
     }
 
@@ -80,7 +93,7 @@ public class HomeFragment extends FirestoreFragment
                 DataPacketItem result = Objects.requireNonNull(
                         (DataPacketItem) data.getSerializableExtra(TextDialogFragment.EXTRA_RESULT)
                 );
-                viewModel
+                dataPacketViewModel
                     .addDataPacket(result.getValue())
                     .observe(HomeFragment.this, additionResult -> {
                         if (additionResult != null && handleFirestoreResult(additionResult)) {

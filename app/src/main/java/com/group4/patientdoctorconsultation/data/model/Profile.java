@@ -3,6 +3,7 @@ package com.group4.patientdoctorconsultation.data.model;
 import com.group4.patientdoctorconsultation.common.IndexedFirestoreResource;
 
 import java.util.List;
+import java.util.Map;
 
 public class Profile extends IndexedFirestoreResource {
 
@@ -20,6 +21,7 @@ public class Profile extends IndexedFirestoreResource {
     public static final String FIELD_HEIGHT_IN_CENTIMETRES = "heightInCentimetres";
     public static final String FIELD_WEIGHT_IN_KG = "weightInKg";
     public static final String FIELD_MEDICAL_CONDITIONS = "medicalConditions";
+    public static final String FIELD_LINKED_PROFILES = "linkedProfiles";
 
     private String profileType;
     private String userName;
@@ -30,6 +32,7 @@ public class Profile extends IndexedFirestoreResource {
     private String heightInCentimetres;
     private String weightInKg;
     private List<String> medicalConditions;
+    private Map<String, Boolean> linkedProfiles;
 
     public String getProfileType() {
         return profileType;
@@ -101,5 +104,13 @@ public class Profile extends IndexedFirestoreResource {
 
     public void setMedicalConditions(List<String> medicalConditions) {
         this.medicalConditions = medicalConditions;
+    }
+
+    public Map<String, Boolean> getLinkedProfiles() {
+        return linkedProfiles;
+    }
+
+    public void setLinkedProfiles(Map<String, Boolean> linkedProfiles) {
+        this.linkedProfiles = linkedProfiles;
     }
 }
