@@ -42,11 +42,8 @@ public class DataPacketRepository {
         );
     }
 
-    public LiveResultListener<DocumentReference> addDataPacket(String profileId, String title) {
+    public LiveResultListener<DocumentReference> addDataPacket(DataPacket dataPacket) {
         LiveResultListener<DocumentReference> liveAdditionListener = new LiveResultListener<>();
-        DataPacket dataPacket = new DataPacket();
-        dataPacket.setPatientId(profileId);
-        dataPacket.setTitle(title);
 
         dataPacketCollection
                 .add(dataPacket)

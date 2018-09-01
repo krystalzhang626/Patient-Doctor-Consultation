@@ -19,6 +19,13 @@ public class DataPacketItem implements Serializable {
     private String value;
     private String displayValue;
 
+    public DataPacketItem(DataPacketItemType dataPacketItemType, String value, String displayValue){
+        this.displayValue = displayValue;
+        this.dataPacketItemType = dataPacketItemType;
+        this.value = value;
+        setIconResourceId();
+    }
+
     public DataPacketItem(DataPacketItemType dataPacketItemType, String value) {
         this.dataPacketItemType = dataPacketItemType;
         this.value = value;

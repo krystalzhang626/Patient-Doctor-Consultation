@@ -27,6 +27,7 @@ import com.group4.patientdoctorconsultation.databinding.FragmentDataPacketBindin
 import com.group4.patientdoctorconsultation.ui.dialogfragment.AttachmentDialogFragment;
 import com.group4.patientdoctorconsultation.ui.dialogfragment.HeartRateDialogFragment;
 import com.group4.patientdoctorconsultation.ui.dialogfragment.LocationDialogFragment;
+import com.group4.patientdoctorconsultation.ui.dialogfragment.ProfileDialogFragment;
 import com.group4.patientdoctorconsultation.ui.dialogfragment.TextDialogFragment;
 import com.group4.patientdoctorconsultation.utilities.DataPacketItemManager;
 import com.group4.patientdoctorconsultation.utilities.DependencyInjector;
@@ -37,7 +38,8 @@ import java.util.Objects;
 
 public class DataPacketFragment extends FirestoreFragment implements View.OnClickListener {
 
-    private static final int RC_TITLE = 1;
+    private static final int RC_PACKET_ITEM = 1;
+    private static final int RC_PACKET_DOCTOR = 2;
     private static final String TAG = DataPacketFragment.class.getSimpleName();
 
     private PacketItemAdapter packetItemAdapter;
@@ -63,6 +65,7 @@ public class DataPacketFragment extends FirestoreFragment implements View.OnClic
         binding.newComment.setOnClickListener(this);
         binding.newHeartRate.setOnClickListener(this);
         binding.newLocation.setOnClickListener(this);
+        binding.doctorIcon.setOnClickListener(this);
 
         return binding.getRoot();
     }
@@ -71,6 +74,7 @@ public class DataPacketFragment extends FirestoreFragment implements View.OnClic
     @Override
     public void onClick(View view) {
         PacketItemDialog itemDialog;
+        int requestCode = RC_PACKET_ITEM;
 
         switch (view.getId()){
             case R.id.new_attachment:
@@ -85,12 +89,16 @@ public class DataPacketFragment extends FirestoreFragment implements View.OnClic
             case R.id.new_location:
                 itemDialog = new LocationDialogFragment();
                 break;
+            case R.id.doctor_icon:
+                itemDialog = new ProfileDialogFragment();
+                requestCode = RC_PACKET_DOCTOR;
+                break;
             default:
                 itemDialog = new TextDialogFragment();
                 break;
         }
 
-        itemDialog.setTargetFragment(this, RC_TITLE);
+        itemDialog.setTargetFragment(this, requestCode);
         itemDialog.show(Objects.requireNonNull(getFragmentManager()).beginTransaction(), TAG);
     }
 
@@ -98,7 +106,7 @@ public class DataPacketFragment extends FirestoreFragment implements View.OnClic
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RC_TITLE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == RC_PACKET_ITEM && resultCode == Activity.RESULT_OK) {
             try {
                 DataPacketItem result = Objects.requireNonNull(
                         (DataPacketItem) data.getSerializableExtra(TextDialogFragment.EXTRA_RESULT)
@@ -108,6 +116,23 @@ public class DataPacketFragment extends FirestoreFragment implements View.OnClic
                 List<DataPacketItem> dataPacketItems = packetItemAdapter.getListItems();
 
                 dataPacketItems.add(result);
+
+                updateDataPacket(dataPacket, dataPacketItems);
+
+            } catch (Exception e) {
+                Log.w(TAG, e.getMessage());
+            }
+        }else if(requestCode == RC_PACKET_DOCTOR && resultCode == Activity.RESULT_OK){
+            try {
+                DataPacketItem result = Objects.requireNonNull(
+                        (DataPacketItem) data.getSerializableExtra(TextDialogFragment.EXTRA_RESULT)
+                );
+
+                DataPacket dataPacket = binding.getDataPacket();
+                List<DataPacketItem> dataPacketItems = packetItemAdapter.getListItems();
+
+                dataPacket.setDoctorId(result.getValue());
+                dataPacket.setDoctorName(result.getDisplayValue());
 
                 updateDataPacket(dataPacket, dataPacketItems);
 

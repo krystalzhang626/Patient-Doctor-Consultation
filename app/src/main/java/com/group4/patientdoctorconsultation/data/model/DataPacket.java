@@ -18,7 +18,9 @@ public class DataPacket extends IndexedFirestoreResource {
 
 
     private String doctorId;
+    private String doctorName;
     private String patientId;
+    private String patientName;
     private String title;
     private List<String> documentReferences;
     private List<String> notes;
@@ -34,12 +36,28 @@ public class DataPacket extends IndexedFirestoreResource {
         this.doctorId = doctorId;
     }
 
+    public String getDoctorName() {
+        return doctorName != null ? doctorName : "No doctor";
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
+    }
+
     public String getPatientId() {
         return patientId;
     }
 
     public void setPatientId(String patientId) {
         this.patientId = patientId;
+    }
+
+    public String getPatientName() {
+        return patientName;
+    }
+
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
     }
 
     public String getTitle() {

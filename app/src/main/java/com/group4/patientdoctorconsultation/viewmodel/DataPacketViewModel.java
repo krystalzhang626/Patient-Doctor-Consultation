@@ -65,8 +65,9 @@ public class DataPacketViewModel extends ViewModel implements FirebaseAuth.AuthS
         return activePacket;
     }
 
-    public LiveResultListener<DocumentReference> addDataPacket(String title){
-        return dataPacketRepository.addDataPacket(profileId.getValue(), title);
+    public LiveResultListener<DocumentReference> addDataPacket(DataPacket dataPacket){
+        dataPacket.setPatientId(profileId.getValue());
+        return dataPacketRepository.addDataPacket(dataPacket);
     }
 
     public void setActivePacketId(String activePacketId){
